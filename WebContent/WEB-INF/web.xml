@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://java.sun.com/xml/ns/javaee" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd" id="WebApp_ID" version="3.0">
+  <display-name>MyMVC</display-name>
+  <welcome-file-list>
+    <welcome-file>index.html</welcome-file>
+    <welcome-file>index.htm</welcome-file>
+    <welcome-file>index.jsp</welcome-file>
+    <welcome-file>default.html</welcome-file>
+    <welcome-file>default.htm</welcome-file>
+    <welcome-file>default.jsp</welcome-file>
+  </welcome-file-list>
+  
+  <!-- 주석문은 이것이다 -->
+  <!-- === 서블릿(Servlet) 등록하기 === -->
+  <!-- 왓스에 기억해준다. (submit 하였을때 ) -->
+  
+  <!-- =========================== 01 get ============================= -->
+    
+  <servlet>
+  	<servlet-name>getMethodTest1</servlet-name>
+  	<servlet-class>begin.ch02.GetMethodTest1</servlet-class>
+  </servlet>
+  
+  <servlet-mapping>
+  	<servlet-name>getMethodTest1</servlet-name>
+  	<!-- <url-pattern>/</url-pattern> ==> / 에는 /MyMVC가 생략되어있다. -->
+  	<url-pattern>/getMethodTest1.do</url-pattern>
+  </servlet-mapping>
+  
+  
+  <!-- =========================== 02 post ============================= -->
+  
+   <servlet>
+  	<servlet-name>postMethodTest2</servlet-name>
+  	<servlet-class>begin.ch02.PostMethodTest2</servlet-class>
+  </servlet>
+  
+   <servlet-mapping>
+  	<servlet-name>postMethodTest2</servlet-name>
+  	<url-pattern>/postMethodTest2.do</url-pattern>
+  </servlet-mapping>
+  
+  <!-- =========================== 03 get/post ============================= -->
+  
+  <servlet>
+  	<servlet-name>get_postMethodTest3</servlet-name>
+  	<servlet-class>begin.ch02.Get_postMethodTest3</servlet-class>
+  </servlet>
+  
+   <servlet-mapping>
+  	<servlet-name>get_postMethodTest3</servlet-name>
+  	<url-pattern>/get_postMethodTest3.do</url-pattern>
+  </servlet-mapping>
+  
+  
+   <!-- === 필터(Filter) 등록하기 === 
+   		필터는 어떤 url이든 해당 servlet이 먼저 작동하는 것이 아니라 
+   		filter-class가 작동 한 다음, 해당 servlet이 작동함
+   	-->
+   <filter>
+     <filter-name>setCharacterEncoding</filter-name>
+     <filter-class>my.filter.MyFilter</filter-class>
+  </filter>
+  <filter-mapping>
+     <filter-name>setCharacterEncoding</filter-name>
+     <url-pattern>/*</url-pattern>
+  </filter-mapping>
+  
+  
+  <!-- === NumberFormatException 등록하기 === -->
+  <error-page>
+  	<exception-type>java.lang.NumberFormatException</exception-type>
+  	<!-- 이런 에러가 뜨면 -->
+  	<location>/01begin/ch05_exception/07error3.jsp</location>
+  	<!-- 여기로 가서 읽어와라 -->
+  </error-page>
+  
+  
+   <!-- ========= MyDBCP Setting Start  ===========  -->
+  <resource-ref>
+ 	<description>Oracle Datasource example</description>
+ 	<res-ref-name>jdbc/myoracle</res-ref-name>
+ 	<res-type>javax.sql.DataSource</res-type>
+ 	<res-auth>Container</res-auth>
+  </resource-ref>
+  <!-- ========= MyDBCP Setting End  ===========  -->
+
+</web-app>
