@@ -1,7 +1,7 @@
 ※ Web Server 
  --> html 파일과 
      jpg, png, gif 확장자로 되어진 이미지 파일로 이루어진 정적인 문서나 이미지 파일을 
-         웹페이지로 보여지게끔 제공해주는 서버이다.
+         웹페이지로 보여지게끔 제공해주는 서버이다!
 
 ※ WAS(Web Application Server)
  --> Web Server 기능 + Web Container(웹컨테이너) 기능을 합친것을 말한다.
