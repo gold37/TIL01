@@ -48,3 +48,44 @@ commit;
 
 update mymvc_member set introduce = '<script>window.onload=function(){var arrBody = document.getElementsByTagName("body"); arrBody[0].style.backgroundColor="green"; }</script>'
 where userid = 'Sunny';
+
+
+
+
+------------------>>> 쇼핑몰 <<<------------------------
+
+create table mymvc_main_image
+(imgno           number not null
+,imgfilename     varchar2(100) not null
+,constraint PK_mymvc_main_image primary key(imgno)
+);
+
+create sequence seq_main_image
+start with 1
+increment by 1
+nomaxvalue
+nominvalue
+nocycle
+nocache;
+
+insert into mymvc_main_image(imgno, imgfilename) values(seq_main_image.nextval, '미샤.png');  
+insert into mymvc_main_image(imgno, imgfilename) values(seq_main_image.nextval, '원더플레이스.png'); 
+insert into mymvc_main_image(imgno, imgfilename) values(seq_main_image.nextval, '레노보.png'); 
+insert into mymvc_main_image(imgno, imgfilename) values(seq_main_image.nextval, '동원.png'); 
+
+commit;
+
+select imgno, imgfilename 
+from mymvc_main_image
+order by imgno asc;
+
+
+
+
+-------------------------------------------------------
+create table tbl_test
+(userid     varchar2(20) not null
+,name       varchar2(20) not null
+,gender     varchar2(1) not null 
+,constraint PK_mymvc_member primary key(userid)
+);

@@ -1,8 +1,14 @@
 package common.controller;
 
-import java.io.*;
-import java.util.*;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Properties;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebInitParam;
@@ -53,10 +59,10 @@ public class FrontController extends HttpServlet { // 큰 빌딩의 프론트(�
 			System.out.println("--- 확인용 : " + props);
 			// ---확인용 : C:/myjsp/MyMVC/WebContent/WEB-INF/Command.properties
 		
-			fis = new FileInputStream(props);
+			fis = new FileInputStream(props); // 내용물을 읽어들임
 			// fis 는 C:/myjsp/MyMVC/WebContent/WEB-INF/Command.properties 파일의 내용을 읽어오기 위한 용도로 쓰이는 객체를 생성함.
 
-			pr.load(fis);
+			pr.load(fis); // Properties에 올림
 			/*
 			    fis 객체를 사용하여 C:/myjsp/MyMVC/WebContent/WEB-INF/Command.properties 파일의 내용을 읽어다가 
 			    Properties 클래스의 객체인 pr 에 로드시킨다. 
@@ -64,23 +70,23 @@ public class FrontController extends HttpServlet { // 큰 빌딩의 프론트(�
 			    = 을 기준으로 왼쪽은 key로 보고, 오른쪽은 value 로 인식한다.	  
 			 */
 
-			Enumeration<Object> en = pr.keys();
+			Enumeration<Object> en = pr.keys(); // en은 key뭉치
 			/*
 			    pr.keys(); 은 
 			    C:/myjsp/MyMVC/WebContent/WEB-INF/Command.properties 파일의 내용물에서 
 			    = 을 기준으로 왼쪽에 있는 모든 key 들만 가져오는 것이다.  	
 			 */
 			
-			while(en.hasMoreElements()) {
+			while(en.hasMoreElements()) { // key 뭉치가 있으면
 				
-				String key = (String) en.nextElement();
+				String key = (String) en.nextElement(); // 하나씩 꺼내오자. Object인데 String이므로 변환시켜줌. 
 			//	System.out.println("---- 확인용 key : " + key);
-			//	System.out.println("---- 확인용 value : " + pr.getProperty(key));
+			//	System.out.println("---- 확인용 value : " + pr.getProperty(key)); // 키 값만 주면
 			/*
 			 	---- 확인용 key : /main.up
 				---- 확인용 value : common.controller.MainController
 				---- 확인용 key : /index.up
-				---- 확인용 value : common.controller.IndexController
+				---- 확인용 value : common.controller.IndexController // value 값 알아올 수 있음
 			 */
 				String className = pr.getProperty(key);
 				
@@ -92,7 +98,7 @@ public class FrontController extends HttpServlet { // 큰 빌딩의 프론트(�
 					// String 타입으로 되어진 className 을 클래스화 시켜주는 것이다.
 				    // 주의할 점은 실제로 String 으로 되어져 있는 문자열이 클래스로 존재해야만 한다는 것이다.
 
-					Object obj = cls.newInstance();
+					Object obj = cls.newInstance(); // 인스턴스화해야 execute 사용 가능해짐
 					// 클래스로부터 실제 객체(인스턴스)를 생성해주는 것
 					
 					System.out.println("--- 확인용 obj.toString() : " + obj.toString());
@@ -103,7 +109,7 @@ public class FrontController extends HttpServlet { // 큰 빌딩의 프론트(�
 						인스턴스화(객체)로 만들었음을 확인함
 					 */
 					
-					cmdMap.put(key, obj);
+					cmdMap.put(key, obj); // 인스턴스 객체를 쓰기위해 map에 올려둠
 					// cmdMap 에서 키값으로 Command.properties 파일에 저장되어진 url 을 주면 
  				    // cmdMap 에서 해당 클래스에 대한 객체(인스턴스)를 얻어오도록 만든 것이다.
 
@@ -161,16 +167,39 @@ public class FrontController extends HttpServlet { // 큰 빌딩의 프론트(�
 		
 			String key = uri.substring(ctxPath.length());
 			System.out.println("--- 확인용 key :" + key); 
-			// --- 확인용 key :/index.up
+			// --- 확인용 key : /member/idDuplicateCheck.up
 			
-			AbstractController action = (AbstractController) cmdMap.get(key);
-
-			if(action == null) {
+			AbstractController action = (AbstractController) cmdMap.get(key); // 이제 map에서 key 값만 주면 인스턴스를 불러옴
+											// 캐스팅
+			
+			if(action == null) { // Command.properties에 없는 클래스가 입력되면 인스턴스할 수 없어서 null 값이 나옴 
 				System.out.println(">>> " + key +" URL 패턴에 매핑된 클래스는 없습니다. <<<");
 			} else {
 				
 				try {
-					action.execute(request, response);
+					action.execute(request, response); // 공통으로 다 들어있는 execute 메소드를 실행해라
+					
+					// execute 메소드 실행
+					
+					boolean bool = action.isRedirect(); // isRedirect가 무엇으로 돼있는지 물음
+					
+					String viewPage = action.getViewPage(); // view 페이지를 읽어옴. set해놨기 때문에 get 가능
+					
+					if(!bool) { // false라면
+						// viewPage 에 명기된 view단 페이지로 forward(dispatcher)를 하겠다는 말이다.
+						// forward 되어지면 웹브라우저의 URL주소 변경되지 않고 그대로 이면서 화면에 보여지는 내용은 forward 되어지는 jsp 파일이다.
+						// 또한 forward 방식은 forward 되어지는 페이지로 데이터를 전달할 수 있다는 것이다.
+						RequestDispatcher dispatcher = request.getRequestDispatcher(viewPage);
+						dispatcher.forward(request, response);
+						
+					}
+					else { // true라면
+						// viewPage 에 명기된 주소로 sendRedirect(웹브라우저의 URL주소 변경됨)를 하겠다는 말이다.
+						// 즉, 단순히 페이지이동을 하겠다는 말이다. 
+						// 암기할 내용은 sendRedirect 방식은 sendRedirect 되어지는 페이지로 데이터를 전달할 수가 없다는 것이다.
+						response.sendRedirect(viewPage); 
+					}
+
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
