@@ -119,10 +119,73 @@ create table ncstest_member
 select *
 from ncstest_member;
 
+------------------------------------------------시험
 
+create table ncstest_member2
+(userId varchar2(20) not null
+,userName varchar2(20) not null
+,birthday varchar2(10) not null
+,gender number(1) not null
+,registerDay date default sysdate
+,constraint PK_ncstest_member2_userid primary key(userId)
+,constraint CK_ncstest_member2_gender check( gender in(1,2) )
+);
+
+create table ncstest_member
+
+(userId varchar2(20) not null
+
+,userName varchar2(20) not null
+
+,birthday varchar2(10) not null
+
+,gender number(1) not null
+
+,registerDay date default sysdate
+
+,constraint PK_ncstest_member_userid primary key(userId)
+
+,constraint CK_ncstest_member_gender check( gender in(1,2) )
+
+);
+
+create table ncstest_member
+(userId varchar2(20) not null
+,userName varchar2(20) not null
+,birthday varchar2(10) not null
+,gender number(1) not null
+,registerDay date default sysdate
+,constraint PK_ncstest_member2_userid primary key(userId)
+,constraint CK_ncstest_member2_gender check( gender in(1,2) )
+);
+
+select *
+from ncstest_member2;
+
+delete from ncstest_member2 where userid='tt';
 
 select ceil(89.0), ceil(89.1), ceil(90)
 from dual;
+
+
+--*** (요구사항8) ***
+--
+--가입된 모든 회원정보가 보여지도록 ncs.memberList.model.NcsMemberDAO 클래스에서 메소드를 생성하는데 그 형태는 List<HashMap<String, String>> memberMapList() throws SQLException; 으로 한다.
+--
+--여기에 필요한 오라클 사용자 정의함수 func_age(varchar2)를 생성하시오.
+--
+--오라클 사용자 정의함수 func_age(p_birthday IN varchar2)는 아래와 같은 동작을 한다.
+--
+--생년월일('19950402') 값을 받아서 현재나이를 리턴시켜주는 사용자정의함수이다.
+create or replace function func_age(p_birthday IN varchar2)
+return number
+is
+    v_age number(3);
+begin
+    v_age := extract(year from sysdate) - to_number(substr(p_birthday,1,4)) + 1;
+    return v_age;
+end func_age;
+
 
 
 --------------*** ajaxstudy 관련 ***--------------
@@ -162,5 +225,70 @@ select seqtitleno
 from test_ajaxnews
 order by seqtitleno desc;
 
+create table test_ajaxnews_contents
+(fk_seqtitleno  number not null
+,newscontents   varchar2(4000) not null
+,constraint PK_test_ajaxnews_contents primary key (fk_seqtitleno)
+,constraint FK_test_ajaxnews_contents foreign key (fk_seqtitleno) 
+                                      references test_ajaxnews(seqtitleno)on delete cascade
+                                                                --기사를 없애면 내용도 사라져야하기 때문에
+);
+
+insert into test_ajaxnews_contents(fk_seqtitleno, newscontents)
+values (1, '박성현 LPGA 투어 텍사스 클래식 우승, 시즌 첫 승');
+
+insert into test_ajaxnews_contents(fk_seqtitleno, newscontents)
+values (2, '뼈아픈 연패-전패, 아직 한번도 못 이겼다고?');
+
+insert into test_ajaxnews_contents(fk_seqtitleno, newscontents)
+values (3, '전설들과 어깨 나란히 한 김해림 "4연패도 노려봐야죠"');
+
+insert into test_ajaxnews_contents(fk_seqtitleno, newscontents)
+values (4, '삼성·현대차 들쑤신 엘리엇, 이번엔 伊 최대통신사 삼켰다');
+
+insert into test_ajaxnews_contents(fk_seqtitleno, newscontents)
+values (5, '"야구장, 어떤 음악으로 채우나" 응원단장들도 괴롭다');
+
+insert into test_ajaxnews_contents(fk_seqtitleno, newscontents)
+values (6, '"공부 후 10분의 휴식, 기억력 높인다"');
+
+insert into test_ajaxnews_contents(fk_seqtitleno, newscontents)
+values (7, '현대차, 쏘나타 트림 출시… 사양과 가격은?');
+
+insert into test_ajaxnews_contents(fk_seqtitleno, newscontents)
+values (8, '날씨무더위 계속…곳곳 강한 소나기');
+
+commit;
+
+select fk_seqtitleno, newscontents
+from test_ajaxnews_contents
+order by fk_seqtitleno desc;
+
+
+select fk_seqtitleno, newscontents
+from test_ajaxnews_contents
+where fk_seqtitleno = 8;
+
+
+select seq_test_ajaxnews_seqtitleno.nextval
+from dual;
+
+
+
+------------------------------------------------------------------------------------------------
+
+---- GSON 관련
+
+create table test_ajaxemp
+(ename varchar2(20)
+,jik   varchar2(10)
+,tel   varchar2(20)
+,email varchar2(30) unique not null
+,birthday varchar2(20)
+);
+
+select ename, jik, tel, email, birthday 
+from test_ajaxemp
+order by ename;
 
 

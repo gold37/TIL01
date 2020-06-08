@@ -42,7 +42,7 @@
    }
    
    div#newsContent {
-      /* border: solid 1px blue; */
+      border: solid 1px blue;
       width: 40%;
       height: 300px;
       overflow: auto;
@@ -51,13 +51,27 @@
    }
    
    table#newstbl, table#newstbl th, table#newstbl td {
-      border: solid 1px gray;      
+      border: solid 1px gray;   
+         
    }
    
    table#newstbl th, table#newstbl td {
       padding: 5px;
    }
 
+   div#newsWrite {
+	  border: solid 1px red; 
+	  clear: both;
+	  padding: 40px 0;
+   }
+   
+   li {
+   	  margin-bottom: 10px;
+   }
+   
+   button {
+   	  margin-left: 20px;
+   }   
 </style>
 
 
@@ -67,7 +81,32 @@
 		func_imgList();
 		func_newsTitleList();
 		
+		$(document).on("click", ".mynews", function(){
+			var seqno = $(this).find(".seqno").text(); // td 태그 안의 element로 감
+		//	alert(seqno);
+			func_newsContents(seqno);
+		});
+		
+		$("#btnSubmit").click(function(){
+			$.ajax({
+				url:"<%= ctxPath%>/ajaxstudy/xmltestNewsWrite.up", 
+				type: "post",
+				data: {"title": $("#title").val(),
+					   "newscontents":$("#newscontents").val()},
+			    success: function(){
+			    	func_newsTitleList();
+			    	$("#title").val("");
+			    	$("#newscontents").val("");
+				}, // 실패했을 경우
+				error: function(request, status, error){
+					alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
+				}
+			});
+		}); // end of $("#btnSubmit").click(function(){})-----------------------
+		
+		
 	}); // end of $(document).ready() --------------------------
+	
 	
 	function func_imgList() {
 		
@@ -179,8 +218,12 @@
 
 					arrNewsTitle.each(function(index, item){ // 반복문
 						
+						if(index == 0) {
+							func_newsContents($(this).find("seqtitleno").text());
+						} // 가장 최근 뉴스 보이기
+						
 						html += "<tr class='mynews'>";
-						html += 	"<td>"+$(this).find("seqtitleno").text()+"</td>"
+						html += 	"<td class='seqno'>"+$(this).find("seqtitleno").text()+"</td>"
 						html += 	"<td>"+$(this).find("jemok").text()+"</td>"
 						html += 	"<td>"+$(this).find("registerday").text()+"</td>"
 						html += "</tr>";
@@ -200,6 +243,29 @@
 		
 	}// end of function func_newsTitleList()------------------------
 	
+	function func_newsContents(seqno) {
+		
+		$.ajax({ 
+			url:"<%= ctxPath%>/ajaxstudy/xmltestNewsContents.up", 
+			type: "get",
+			// method 아님! 실수하지않도록 주의~ type 안적으면 기본은 get방식.
+			data:{ "seqno":seqno }, // "seqno"는 getParameter해올때 이름. seqno는 넘기는 value값
+			dataType:"xml",
+			success: function(xml) { // 진동벨 울리면서 성공되면 콜백함수			
+				var rootElement = $(xml).find(":root");
+				var html = rootElement.text();
+				$("#newsContent").html(html);
+			}, // 실패했을 경우
+			error: function(request, status, error){
+				alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
+			}
+		});
+		
+		
+	}// end of function func_newsContents(seqno)--------------------
+	
+	
+	
 	
 	
 </script>
@@ -210,15 +276,30 @@
 	
 	<div id="mycontainer">
 	
-	
 		<h3>여기는 URL이 /MyMVC/ajaxstudy/xmltestMain.up인 페이지 입니다.</h3>
 		
 		<!-- 여기에 넣는게 최종목표 -->
 		<div id="imgList"></div> 
 		<div id="newsTitleList"></div>
-		<div id="newsContent">
-		괜찮아 ~~~~~~될거야 ~~~~~~~~~~~~~~ ^ㅇ^
-		</div> 
+		<div id="newsContent"></div> 
+		<div id="newsWrite">
+			<form name="newsFrm">
+				<ul>
+					<li>
+						<label>기사제목</label>
+						<input type="text" name="title" id="title" size="30" />
+					</li>
+				
+					<li>
+						<label>기사내용</label>
+						<textarea rows="5" cols="40" id="newscontents" name="newscontents" ></textarea>
+					</li>
+				</ul>
+				<button type="button" id="btnSubmit">전송</button>
+				<button type="reset">취소</button>
+			</form>
+		</div>
+		<!-- 풀어보기 ~~~ -->
 		<div id="memberList"></div> 
 	
 	</div>
