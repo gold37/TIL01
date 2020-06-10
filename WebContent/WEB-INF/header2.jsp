@@ -13,22 +13,23 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
-<link rel="stylesheet" type="text/css" href="<%= ctxPath%>/css/style.css" />
+<link rel="stylesheet" type="text/css" href="<%= ctxPath%>/css/style2.css" />
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
 
+<link rel="stylesheet" type="text/css" href="<%= ctxPath%>/jquery-ui-1.11.4.custom/jquery-ui.css" />
+<script type="text/javascript" src="<%= ctxPath%>/jquery-ui-1.11.4.custom/jquery-ui.js"></script>
+
 <script type="text/javascript">
 	$(document).ready(function(){
-	/*	
+		
 		var vhtml = "";
 		for(var i=0; i<15; i++) {
 			vhtml += (i+1)+".내용물<br/>";
 		}
 		
 		$("#sideconent").html(vhtml);
-	*/
-	
-	
+		
 	});
 
 </script>
@@ -60,19 +61,6 @@
 				<a href="<%= ctxPath %>/member/memberList.jsp">회원목록</a>
 			</div>
 		</div>
-	</div>
-	
-	<div id="sideinfo">
-		<div class="row">
-			<div class="col-md-12" style="height: 50px; text-align: left; padding: 20px;">
-				2. 로그인/Tree/View
-				<%@ include file="/WEB-INF/login/login.jsp" %> <!-- jsp파일 끼워넣기 -->
-			</div>
-		</div>
-		<div class="row">
-			<div class="col-md-12" id="sideconent" style="text-align: left; padding: 20px;">
-			</div>
-		</div>	
 	</div>
 	
 	<div id="content" align="center">

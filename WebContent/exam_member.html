@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>시험콕 연습</title>
+<script src="/MyMVC/js/jquery-3.3.1.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){
+	
+	var bIsClickEmailCheck = false;
+	
+	$("#emailDuplicateCheck").click(function(){
+	
+
+		bIsClickEmailCheck = true;
+		
+		$.ajax({
+			url:"/MyMVC/practice/ExamCheckEmail",
+			data:{"email":$("#email").val()},
+			dataType:"text",
+			success:function(json){
+				if(json.isUse) { // json.isUse -> true (중복이 되지 않은 이메일로 email로 사용 가능하다) 
+					$("#emailResult").html("사용가능합니다.").css("color","navy");
+				}
+				else { // json.isUse -> false (중복이 된 이메일로 email로 사용 불가능하다)
+					$("#emailResult").html($("#email").val()+"은 중복된 email 입니다.").css("color","red");
+					$("#email").val(""); // 입력된 값 없앰
+				}
+			},
+			error: function(request, status, error){
+				alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
+			}
+			
+		}); 
+		
+	});
+	
+	$("input#email").blur(function () {
+		
+		var regExp = /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i;
+	
+		var bool = regExp.test($(this).val());
+	
+		if(!bool){ // 올바르지 않을 때
+			
+			$("span#emailResult").html("올바른 이메일이 아닙니다.").css('display','');
+			$(this).val(""); // 값 비움
+			$(this).focus();
+		}
+		
+		else { // 올바를 때
+
+			$("span#emailResult").empty(); // error메세지 감추기
+			$(":input").prop("disabled", false);
+		}
+	
+	});
+	
+	$("#btnEmpSubmit").click(function(){ // 입력 버튼 눌렀을때
+		
+		if(!bIsClickEmailCheck) {
+			alert("email 중복 검사를 하세요 !");
+			return; // 종료
+		}
+		else {
+			alert("입력성공 *^ㅁ^*");
+		}
+	
+	});
+	
+	
+});
+
+
+
+function email_check( email ) {    
+    var regex=/([\w-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/;
+    return (email != '' && email != 'undefined' && regex.test(email)); 
+}
+
+
+
+</script>
+
+</head>
+<body>
+
+<table id="loginFrm">
+	 <tr>
+        <td>이름</td>
+        <td><input type="text" id="name" /></td>
+     </tr>
+     
+     <tr>
+        <td>email</td>
+        <td>
+           <input type="email" id="email"/>
+           <button id="emailDuplicateCheck">email중복검사</button>
+           <br/><span id="emailResult"></span>
+        </td>
+     </tr>
+     
+    <tr>
+      <td colspan="2">
+         <button type="button" id="btnEmpSubmit">입력</button>
+         <button type="reset">취소</button>
+      </td>
+   </tr>
+</table>
+</body>
+</html>

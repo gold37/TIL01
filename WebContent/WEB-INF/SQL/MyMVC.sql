@@ -291,4 +291,57 @@ select ename, jik, tel, email, birthday
 from test_ajaxemp
 order by ename;
 
+create table exam_ajaxmember
+(name varchar2(20)
+,email varchar2(30) primary key );
 
+
+select *
+from exam_ajaxmember;
+
+insert into exam_ajaxmember values ('곽짱', 'kwak@naver.com');
+
+---------------------------------------------------------------------------------------------
+
+--- *** 회원 테이블 생성 *** ---  
+create table mymvc_shopping_member
+(idx                number(10)     not null       -- 회원번호(시퀀스로 데이터가 들어온다)
+,userid             varchar2(20)   not null       -- 회원아이디
+,name               varchar2(30)   not null       -- 회원명
+,pwd                varchar2(200)  not null       -- 비밀번호 (SHA-256 암호화 대상)
+,email              varchar2(200)  not null       -- 이메일   (AES-256 암호화/복호화 대상)
+,hp1                varchar2(3)                   -- 연락처
+,hp2                varchar2(200)                 --         (AES-256 암호화/복호화 대상) 국번
+,hp3                varchar2(200)                 --         (AES-256 암호화/복호화 대상) 자기 번호
+,postcode           varchar2(5)                    -- 우편번호
+,address            varchar2(200)                  -- 주소
+,detailaddress      varchar2(200)                 -- 상세주소
+,extraaddress       varchar2(200)                 -- 참고항목
+,gender             varchar2(1)                    -- 성별     남자 : 1 / 여자 : 2
+,birthday           varchar2(8)                   -- 생년월일 
+,coin               number default 0              -- 코인액
+,point              number default 0              -- 포인트 
+,registerday        date default sysdate          -- 가입일자
+,status             number(1) default 1           -- 회원탈퇴유무   1:사용가능(가입중) / 0:사용불능(탈퇴) 
+,lastLoginDate      date default sysdate          -- 마지막으로 로그인 한 날짜시간 기록용
+,lastPwdChangeDate  date default sysdate          -- 마지막으로 암호를 변경한 날짜시간 기록용
+,clientip           varchar2(20)                  -- 클라이언트의 IP 주소
+,constraint   PK_mymvc_shopping_member primary key(idx)
+,constraint   UQ_mymvc_shopping_member unique(userid)
+,constraint   CK_mymvc_shopping_member_gen check( gender in('1','2') ) 
+,constraint   CK_mymvc_shopping_member_sta check( status in(0,1) ) 
+);
+
+drop sequence seq_shopping_member;
+
+create sequence seq_shopping_member
+start with 1
+increment by 1
+nomaxvalue
+nominvalue
+nocycle
+nocache;
+
+select *
+from mymvc_shopping_member
+order by idx desc;
