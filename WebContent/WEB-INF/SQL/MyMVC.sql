@@ -332,7 +332,6 @@ create table mymvc_shopping_member
 ,constraint   CK_mymvc_shopping_member_sta check( status in(0,1) ) 
 );
 
-drop sequence seq_shopping_member;
 
 create sequence seq_shopping_member
 start with 1
@@ -345,3 +344,43 @@ nocache;
 select *
 from mymvc_shopping_member
 order by idx desc;
+
+
+select idx, userid, name, email, hp1, hp2, hp3, postcode, address, detailaddress, extraAddress, gender   
+     , substr(birthday,1,4) AS birthyyyy, substr(birthday,5,2) AS birthmm, substr(birthday, 7) AS birthdd  
+     , coin, point, to_char(registerday,'yyyy-mm-dd') AS registerday  
+     , trunc( months_between(sysdate, lastPwdChangeDate) ) AS pwdchangegap  
+     , trunc( months_between(sysdate, lastLoginDate) ) AS lastlogindategap 
+from mymvc_shopping_member 
+order by idx asc;
+
+select idx, userid, name, email, hp1, hp2, hp3, postcode, address, detailaddress, extraAddress, gender   
+     , substr(birthday,1,4) AS birthyyyy, substr(birthday,5,2) AS birthmm, substr(birthday, 7) AS birthdd  
+     , coin, point, to_char(registerday,'yyyy-mm-dd') AS registerday  
+     , trunc( months_between(sysdate, lastPwdChangeDate) ) AS pwdchangegap  
+     , trunc( months_between(sysdate, lastLoginDate) ) AS lastlogindategap 
+from mymvc_shopping_member 
+where userid = 'test01' and pwd = '9695b88a59a1610320897fa84cb7e144cc51f2984520efb77111d94b402a8382';
+
+
+select userid, to_char (lastlogindate, 'yyyy-mm-dd hh24:mi:ss') as "마지막 로그인 시각"
+from mymvc_shopping_member 
+where userid = 'test01';
+
+update mymvc_shopping_member set lastlogindate = add_months(lastlogindate, -13) -- 13개월 뺌
+where userid = 'test01';
+
+commit;
+
+update mymvc_shopping_member set lastlogindate = sysdate
+where userid = 'test01';
+
+update mymvc_shopping_member set lastpwdchangedate = add_months(lastpwdchangedate, -4)
+where userid = 'juju';
+
+commit;
+
+
+select userid, to_char (lastpwdchangedate, 'yyyy-mm-dd hh24:mi:ss') as "마지막 암호 변경 시각"
+from mymvc_shopping_member 
+where userid = 'juju';

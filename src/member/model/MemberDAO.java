@@ -6,6 +6,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.HashMap;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
@@ -128,5 +129,99 @@ public class MemberDAO implements InterMemberDAO {
 		return isUse;
 	}
 
+	
+	// 아이디와 암호를 입력받아서 그 회원에 대한 정보를 리턴(로그인 처리)
+	@Override
+	public MemberVO selectOneMember(HashMap<String, String> paraMap) throws SQLException {
+		MemberVO mvo = null;
+		
+		try {
+			conn = ds.getConnection();
+			
+			String sql = " select idx, userid, name, email, hp1, hp2, hp3, postcode, address, detailaddress, extraAddress, gender "+
+						 "     , substr(birthday,1,4) AS birthyyyy, substr(birthday,5,2) AS birthmm, substr(birthday, 7) AS birthdd "+
+						 "     , coin, point, to_char(registerday,'yyyy-mm-dd') AS registerday "+
+						 "     , trunc( months_between(sysdate, lastPwdChangeDate) ) AS pwdchangegap "+
+						 "     , trunc( months_between(sysdate, lastLoginDate) ) AS lastlogindategap "+
+						 " from mymvc_shopping_member \n"+
+						 " where userid = ? and pwd = ? ";
+			
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, paraMap.get("userid"));
+			pstmt.setString(2, Sha256.encrypt( paraMap.get("pwd") ));
+			
+			rs = pstmt.executeQuery();
+			
+			if(rs.next()) {
+
+				mvo = new MemberVO();
+				mvo.setIdx(rs.getInt("idx"));
+				mvo.setUserid(rs.getString("userid"));
+				mvo.setName(rs.getString("name"));
+				mvo.setEmail(aes.decrypt(rs.getString("email"))); // 복호화
+				mvo.setHp1(rs.getString("hp1"));
+				mvo.setHp2(aes.decrypt(rs.getString("hp2"))); // 복호화
+				mvo.setHp3(aes.decrypt(rs.getString("hp3"))); // 복호화
+				mvo.setPostcode(rs.getString("postcode"));
+			    mvo.setAddress(rs.getString("address"));
+			    mvo.setDetailAddress(rs.getString("detailaddress"));
+			    mvo.setExtraAddress(rs.getString("extraaddress"));
+			    mvo.setGender(rs.getString("gender"));
+			    mvo.setBirthyyyy(rs.getString("birthyyyy"));
+			    mvo.setBirthmm(rs.getString("birthmm"));
+			    mvo.setBirthdd(rs.getString("birthdd"));
+			    mvo.setCoin(rs.getInt("coin"));   // int
+			    mvo.setPoint(rs.getInt("point")); // int
+			    mvo.setRegisterday(rs.getString("registerday"));
+			    
+			    // 마지막으로 암호를 변경한 날짜가 현재시각으로부터 3개월이 지났으면 true, 아니면 false로 표식한다.
+			    if( rs.getInt("pwdchangegap") >= 3 ) {
+			    	mvo.setRequirePwdChange(true);
+			    	
+			    // 마지막 로그인 날짜가 현재일로부터 1년(=12개월)이 지났으면 휴면처리
+			    if( rs.getInt("lastlogindategap") >= 12 ) {
+			    	mvo.setIdleStatus(true); // 계정 휴면처리
+			    }
+			    else {
+				    // 마지막 로그인 시간 변경 기록하기
+				    sql = " update mymvc_shopping_member set lastlogindate = sysdate "
+				    	+ " where userid = ? ";
+				    
+				    pstmt = conn.prepareStatement(sql);
+				    pstmt.setString(1, paraMap.get("userid"));
+				    pstmt.executeUpdate();
+			    }
+			  }
+			}
+			
+		} catch( UnsupportedEncodingException | GeneralSecurityException e) {
+			e.printStackTrace();
+		} finally {
+			close();
+		}
+		
+		return mvo;
+	}
+
+	// 휴면상태인 사용자 계정을 휴면이 아닌 상태로 바꾸기
+	// 즉, lastlogindate 컬럼의 값을 sysdate로 update해준다.
+	@Override
+	public void expireIdle(int idx) throws SQLException {
+
+		try {
+			conn = ds.getConnection();
+			
+			String sql = " update mymvc_shopping_member set lastlogindate = sysdate "
+					   + " where idx = ? ";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, idx);
+			
+			pstmt.executeUpdate();
+			
+		} finally {
+			close();
+		}
+	}
+	
 	
 }

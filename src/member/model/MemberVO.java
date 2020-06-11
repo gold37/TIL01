@@ -32,8 +32,8 @@ public class MemberVO {
 	private String lastPwdChangeDate; // 마지막으로 암호를 변경한 날짜시간 기록용
 	
 	private boolean requirePwdChange = false; 
-	// 마지막으로 암호를 변경한 날짜가 현재시각으로 부터 6개월이 지났으면 true
-	// 마지막으로 암호를 변경한 날짜가 현재시각으로 부터 6개월이 지나지 않았으면 false 
+	// 마지막으로 암호를 변경한 날짜가 현재시각으로 부터 3개월이 지났으면 true
+	// 마지막으로 암호를 변경한 날짜가 현재시각으로 부터 3개월이 지나지 않았으면 false 
 	
 	private boolean idleStatus = false;  // 휴면유무(휴면이 아니라면 false, 휴면이면  true)
 	// 마지막으로 로그인 한 날짜시간이 현재시각으로 부터 1년이 지났으면 true(휴면으로 지정)
