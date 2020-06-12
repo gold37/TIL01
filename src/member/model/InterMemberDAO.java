@@ -17,5 +17,14 @@ public interface InterMemberDAO {
 	// 휴면상태인 사용자 계정을 휴면이 아닌 상태로 바꾸기
 	// 즉, lastlogindate 컬럼의 값을 sysdate로 update해준다.
 	void expireIdle(int idx) throws SQLException;
+
+	// 아이디 찾기 (성명, 핸드폰 번호를 입력받아서 해당 사용자의 아이디를 알려준다.)
+	String findUserid(HashMap<String, String> paraMap) throws SQLException;
+
+	// 비밀번호 찾기 (아이디, 이메일을 입력받아서 해당 사용자의 존재 유무를 알려준다.) 
+	boolean isUserExist(HashMap<String, String> paraMap) throws SQLException;
+
+	// 암호 변경하기
+	int pwdUpdate(String pwd, String userid) throws SQLException;
 	
 }

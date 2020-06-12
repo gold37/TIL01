@@ -384,3 +384,14 @@ commit;
 select userid, to_char (lastpwdchangedate, 'yyyy-mm-dd hh24:mi:ss') as "마지막 암호 변경 시각"
 from mymvc_shopping_member 
 where userid = 'juju';
+
+
+select userid
+from mymvc_shopping_member 
+where status = 1 and
+        name = '쥬쥬' and 
+        trim(hp1) || trim(hp2) || trim(hp3) = '01023456789';
+        
+        
+update mymvc_shopping_member  set pwd = ?
+where userid = ? ;

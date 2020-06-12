@@ -380,7 +380,7 @@
    	  var bFlag = false; 
    	   
    	  $("input:radio[name=gender]").each(function(){ // 반복문
-   		  var bChe                           cked = $(this).prop ("checked");
+   		  var bChecked = $(this).prop ("checked");
    		  if(bChecked) {
    			  bFlag = true;
    			  return false; // break

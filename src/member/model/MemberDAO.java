@@ -222,6 +222,107 @@ public class MemberDAO implements InterMemberDAO {
 			close();
 		}
 	}
+
+	
+	// 아이디 찾기(성명, 핸드폰 번호를 입력받아서 해당 사용자의 아이디를 알려준다.)
+	@Override
+	public String findUserid(HashMap<String, String> paraMap) throws SQLException {
+		String userid = null; 
+		
+		try {
+			conn = ds.getConnection();
+			
+			String sql = " select userid " + 
+						 " from mymvc_shopping_member " + 
+						 " where status = 1 and " + 
+						 "        name = ? and " + 
+						 "        trim(hp1) || trim(hp2) || trim(hp3) = ? ";
+			
+			pstmt = conn.prepareStatement(sql);
+			
+			pstmt.setString(1, paraMap.get("name"));
+			
+			String mobile = paraMap.get("mobile"); // 01023456789
+			mobile = mobile.substring(0, 3)+ aes.encrypt(mobile.substring(3, 7)) + aes.encrypt(mobile.substring(7));
+					// ▲ 3자리 따옴 				▲ 4자리 따와서 양방향 암호화			▲ 4자리 따와서 양방향 암호화
+			
+			pstmt.setString(2, mobile);
+			
+			rs = pstmt.executeQuery();
+			
+			if(rs.next()) { // select 된게 있다면
+				userid = rs.getString("userid"); // userid를 읽어와 넣어주고 리턴함
+			}
+			
+		} catch( UnsupportedEncodingException | GeneralSecurityException e) {
+			e.printStackTrace();
+		} finally {
+			close();
+		}
+		
+		return userid;
+	}
+
+	
+	// 비밀번호 찾기 (아이디, 이메일을 입력받아서 해당 사용자의 존재 유무를 알려준다.)
+	@Override
+	public boolean isUserExist(HashMap<String, String> paraMap) throws SQLException {
+		boolean isUserExist = false;
+
+		try {
+			
+			conn = ds.getConnection();
+			String sql = " select userid " + 
+					     " from mymvc_shopping_member " + 
+					     " where status = 1 and " + 
+					     " userid = ? and " + 
+					     " email = ? ";
+			
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, paraMap.get("userid"));
+			pstmt.setString(2, aes.encrypt(paraMap.get("email")));
+			
+			rs = pstmt.executeQuery();
+			
+			isUserExist =rs.next();
+			
+		} catch (UnsupportedEncodingException | GeneralSecurityException e) {
+			e.printStackTrace();
+		} finally {
+			close();
+		}
+		
+		return isUserExist;
+
+		
+	}
+
+	// 암호 변경하기
+	@Override
+	public int pwdUpdate(String pwd, String userid) throws SQLException {
+
+		int result = 0;
+
+		try {
+			
+			conn = ds.getConnection();
+			
+			String sql = " update mymvc_shopping_member  set pwd = ? " + 
+						 " where userid = ? ";
+
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, Sha256.encrypt(pwd)); // 암호를 SHA256 알고리즘으로 단방향 암호화 시킨다.
+			pstmt.setString(2, userid);
+			
+			result = pstmt.executeUpdate();
+			
+		} finally {
+			close();
+		}
+		
+		return result;
+	
+	}
 	
 	
 }
