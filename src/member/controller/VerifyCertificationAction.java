@@ -36,7 +36,7 @@ public class VerifyCertificationAction extends AbstractController {
 	 	
 	 	// !!! 중요 !!! //
 	 	// 세션에 저장된 인증코드 삭제하기 !!!!
-	 	session.removeAttribute("certificationCode");
+	 	session.removeAttribute("certificationCode"); //특정 내용물만 지움
 		
 	}
 

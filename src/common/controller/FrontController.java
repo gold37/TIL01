@@ -43,7 +43,7 @@ public class FrontController extends HttpServlet { // 큰 빌딩의 프론트(�
 		 */
 		
 		// *** 확인용 *** //
-		System.out.println("확인용 --> 서블릿 FrontController의 init(ServletConfig config) 메소드가 실행됨");
+	//	System.out.println("확인용 --> 서블릿 FrontController의 init(ServletConfig config) 메소드가 실행됨");
 	
 		Properties pr = new Properties();
 		// Properties 는 Collection 중 HashMap 계열중의  하나로써
@@ -56,7 +56,7 @@ public class FrontController extends HttpServlet { // 큰 빌딩의 프론트(�
 		try {
 		
 			String props = config.getInitParameter("propertyConfig");
-			System.out.println("--- 확인용 : " + props);
+		//	System.out.println("--- 확인용 : " + props);
 			// ---확인용 : C:/myjsp/MyMVC/WebContent/WEB-INF/Command.properties
 		
 			fis = new FileInputStream(props); // 내용물을 읽어들임
@@ -101,7 +101,7 @@ public class FrontController extends HttpServlet { // 큰 빌딩의 프론트(�
 					Object obj = cls.newInstance(); // 인스턴스화해야 execute 사용 가능해짐
 					// 클래스로부터 실제 객체(인스턴스)를 생성해주는 것
 					
-					System.out.println("--- 확인용 obj.toString() : " + obj.toString());
+				//	System.out.println("--- 확인용 obj.toString() : " + obj.toString());
 					/*
 					 	--- 확인용 obj.toString() : 클래스 MainController의 인스턴스 메소드 toString() 호출함
 						--- 확인용 obj.toString() : 클래스 IndexController의 인스턴스 메소드 toString() 호출함
@@ -166,7 +166,7 @@ public class FrontController extends HttpServlet { // 큰 빌딩의 프론트(�
 			// --- 확인용 URI : /MyMVC
 		
 			String key = uri.substring(ctxPath.length());
-			System.out.println("--- 확인용 key :" + key); 
+		//	System.out.println("--- 확인용 key :" + key); 
 			// --- 확인용 key : /member/idDuplicateCheck.up
 			
 			AbstractController action = (AbstractController) cmdMap.get(key); // 이제 map에서 key 값만 주면 인스턴스를 불러옴
@@ -189,15 +189,19 @@ public class FrontController extends HttpServlet { // 큰 빌딩의 프론트(�
 						// viewPage 에 명기된 view단 페이지로 forward(dispatcher)를 하겠다는 말이다.
 						// forward 되어지면 웹브라우저의 URL주소 변경되지 않고 그대로 이면서 화면에 보여지는 내용은 forward 되어지는 jsp 파일이다.
 						// 또한 forward 방식은 forward 되어지는 페이지로 데이터를 전달할 수 있다는 것이다.
-						RequestDispatcher dispatcher = request.getRequestDispatcher(viewPage);
-						dispatcher.forward(request, response);
+						if(viewPage != null) {
+							RequestDispatcher dispatcher = request.getRequestDispatcher(viewPage);
+							dispatcher.forward(request, response);
+						}
 						
 					}
 					else { // true라면
 						// viewPage 에 명기된 주소로 sendRedirect(웹브라우저의 URL주소 변경됨)를 하겠다는 말이다.
 						// 즉, 단순히 페이지이동을 하겠다는 말이다. 
 						// 암기할 내용은 sendRedirect 방식은 sendRedirect 되어지는 페이지로 데이터를 전달할 수가 없다는 것이다.
-						response.sendRedirect(viewPage); 
+						if(viewPage != null) {
+							response.sendRedirect(viewPage); 
+						}
 					}
 
 				} catch (Exception e) {

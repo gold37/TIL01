@@ -19,7 +19,7 @@ public class PwdFindAction extends AbstractController {
 		String method = request.getMethod(); // "GET" or "POST"
 		
 		if("POST".equalsIgnoreCase(method)) { // 전달 방식이 post라면 값을 받아옴
-		// 아이디 찾기 모달창에서 찾기 버튼을 클랙했을 경우
+		// 비밀번호 찾기 모달창에서 찾기 버튼을 클랙했을 경우
 			
 			String userid = request.getParameter("userid");
 			String email = request.getParameter("email");
