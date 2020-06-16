@@ -2,6 +2,7 @@ package member.model;
 
 import java.sql.SQLException;
 import java.util.HashMap;
+import java.util.List;
 
 public interface InterMemberDAO {
 
@@ -26,5 +27,14 @@ public interface InterMemberDAO {
 
 	// 암호 변경하기
 	int pwdUpdate(String pwd, String userid) throws SQLException;
+
+	// 회원의 coin 변경하기
+	int coinUpdate(HashMap<String, String> paraMap) throws SQLException;
+
+	// 특정 회원 정보 수정하기
+	int updateMember(MemberVO membervo) throws SQLException;
+	
+	// 관리자를 제외한 모든 회원 정보 조회하기
+	List<MemberVO> selectAllMember() throws SQLException;
 	
 }

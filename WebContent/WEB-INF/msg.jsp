@@ -5,6 +5,9 @@
 	alert("${requestScope.message}");
 	location.href="${loc}"; // 페이지 이동
 	
+	self.close(); // 팝업창 닫기
+	opener.location.reload(true) // 부모창 새로고침. 정보 변경내용 바로 반영됨.
+	
 	/*	
 	
 	location.href="javascript:history.go(-2);";  // 이전이전 페이지로 이동 

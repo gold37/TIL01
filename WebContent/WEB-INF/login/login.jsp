@@ -208,7 +208,20 @@
 		location.href = "<%= request.getContextPath()%>/login/logout.up";
 		
 	} // end of function goLogOut() ----------------------
+
 	
+	// === 나의 정보 수정하기 === //
+	function goEditPersonal(idx) {
+		
+		// 팝업창 띄우기
+		var url = "<%= request.getContextPath()%>/member/memberEdit.up?idx="+idx;
+		
+		window.open(url, "memberEdit",
+					"left=350px, top=100px, width=800px, height=650px"); 
+				
+		
+	}
+
 	
 	// === 코인충전 결제금액 선택하기 (실제로 카드 결제) === //
 	
@@ -234,9 +247,18 @@
 		
 	}
 	
-	
+
 	function goCoinUpdate(idx, coinmoney) {
-		alert("DB에서 회원번호 "+idx+"에 대한 코인금액"+coinmoney+"원 증가할 예정");
+	//	alert("DB에서 회원번호 "+idx+"에 대한 코인금액"+coinmoney+"원 증가할 예정");
+		
+		var frm = document.coinUpdateFrm;
+		frm.idx.value = idx;
+		frm.coin.value = coinmoney;
+		
+		frm.method = "POST";
+		frm.action = "<%= request.getContextPath()%>/member/coinUpdateLoginUser.up";
+		frm.submit();
+		
 	}
 	
 </script>

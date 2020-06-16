@@ -6,7 +6,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.HashMap;
+import java.util.*;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
@@ -307,7 +307,7 @@ public class MemberDAO implements InterMemberDAO {
 			
 			conn = ds.getConnection();
 			
-			String sql = " update mymvc_shopping_member  set pwd = ? " + 
+			String sql = " update mymvc_shopping_member set pwd = ? " + 
 						 " where userid = ? ";
 
 			pstmt = conn.prepareStatement(sql);
@@ -323,6 +323,117 @@ public class MemberDAO implements InterMemberDAO {
 		return result;
 	
 	}
+
 	
+	// 회원의 coin 변경하기
+	@Override
+	public int coinUpdate(HashMap<String, String> paraMap) throws SQLException {
+
+		int result = 0;
+		
+		try {
+
+			conn = ds.getConnection();
+			
+			String sql = " update mymvc_shopping_member set coin = coin+? , point = point+? "
+					   + " where idx = ? ";
+			
+			pstmt = conn.prepareStatement(sql);
+			
+			pstmt.setString(1, paraMap.get("coin"));
+			pstmt.setInt(2, (int)(Integer.parseInt(paraMap.get("coin"))*0.01)); // (int)3000.0 ==> 3000
+			pstmt.setString(3, paraMap.get("idx"));
+			
+			result = pstmt.executeUpdate();
+			
+		} finally {
+			close();
+		
+		}
+		
+		return result;
+	}
+
+	
+	// 특정 회원 정보 수정하기
+	@Override
+	public int updateMember(MemberVO membervo) throws SQLException {
+
+	      int result=0;
+	      
+	      try {
+	         
+	         conn = ds.getConnection();
+	         String sql = " update mymvc_shopping_member set name=?, pwd=?, email=?, hp1=?, hp2=?, hp3=?, postcode=?, address=?, detailAddress=?, extraAddress=?, lastpwdchangedate=sysdate "
+	                  	 +" where idx = ? ";               
+	         
+	         pstmt = conn.prepareStatement(sql);
+	         
+	           pstmt.setString(1, membervo.getName());
+	           pstmt.setString(2, Sha256.encrypt(membervo.getPwd()) ); // 단방향 
+	           pstmt.setString(3, aes.encrypt(membervo.getEmail()) );  // 양방향
+	           pstmt.setString(4, membervo.getHp1());    
+	           pstmt.setString(5, aes.encrypt(membervo.getHp2()));    
+	           pstmt.setString(6, aes.encrypt(membervo.getHp3()));    
+	           pstmt.setString(7, membervo.getPostcode());
+	           pstmt.setString(8, membervo.getAddress());
+	           pstmt.setString(9, membervo.getDetailAddress());
+	           pstmt.setString(10, membervo.getExtraAddress());
+	           pstmt.setInt(11, membervo.getIdx());
+	              
+	              
+	         result = pstmt.executeUpdate();      
+	         
+	      } catch(Exception e){
+	         e.printStackTrace();
+	      }finally {
+	         close();
+	      }
+	                        
+	      return result;   
+	
+		}
+
+	
+	// 관리자를 제외한 모든 회원 정보 조회하기
+	@Override
+	public List<MemberVO> selectAllMember() throws SQLException {
+
+		List<MemberVO> memberList = new ArrayList<>();
+		
+		try {
+			conn = ds.getConnection();
+			
+			String sql = " select idx, userid, name, email, gender "+
+						 " from mymvc_shopping_member "+
+						 " where userid != 'admin' "+
+					     " order by idx desc ";
+			
+			pstmt = conn.prepareStatement(sql);
+			
+			rs = pstmt.executeQuery();
+			
+			while(rs.next()) {
+				MemberVO mvo = new MemberVO();
+				
+				mvo = new MemberVO();
+				mvo.setIdx(rs.getInt("idx"));
+				mvo.setUserid(rs.getString("userid"));
+				mvo.setName(rs.getString("name"));
+				mvo.setEmail(aes.decrypt(rs.getString("email"))); // 복호화
+			    mvo.setGender(rs.getString("gender"));
+			    
+			    memberList.add(mvo);
+			}
+			
+		} catch( UnsupportedEncodingException | GeneralSecurityException e) {
+			e.printStackTrace();
+		} finally {
+			close();
+		}
+		
+		return memberList;
+	
+	}
 	
 }

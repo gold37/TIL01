@@ -395,3 +395,38 @@ where status = 1 and
         
 update mymvc_shopping_member  set pwd = ?
 where userid = ? ;
+
+
+
+select 10+20, 10+'20', 10+to_number('20')
+from dual;
+
+select *
+from mymvc_shopping_member
+where userid != 'admin';
+
+
+create or replace procedure pcd_shopping_member_insert
+(p_userid  IN  varchar2
+,p_name    IN  varchar2
+,p_gender  IN  char)
+is
+begin
+    for i in 1..100 loop 
+        insert into mymvc_shopping_member(idx, userid, name, pwd, email, hp1, hp2, hp3, postcode, address, detailAddress, extraAddress, gender, birthday, coin, point, registerday, status, lastlogindate, lastpwdchangedate, clientip) 
+        values(seq_shopping_member.nextval, p_userid||i, p_name||i, '0208788aa2035cd5be6697efbd285df1afa881c8fd25e4bd5bbb247c29c58454', 'sxNpwOHUNLp91xhVQczFwhXeDJlgw9iDsy8fIyoyj+g=' , '010', 'lvQpJHHcv9BajDlHmcleFA==', 'xlSJbVV0F2KyPWzzhc+OaA==', '50234', '서울 송파구 오금로 95', '337동 708호', '오금동 현대아파트', p_gender, '19960920', default, default, default, default, default, default, '127.0.0.1');         
+    end loop;
+end pcd_shopping_member_insert;   
+-- Procedure PCD_SHOPPING_MEMBER_INSERT이(가) 컴파일되었습니다.  
+
+exec pcd_shopping_member_insert('TaeYeon', '김태연', '2');
+
+exec pcd_shopping_member_insert('VIINI', '권현빈', '1');
+
+drop table mymvc_shopping_member;
+
+commit;
+
+select *
+from mymvc_shopping_member
+order by idx desc;

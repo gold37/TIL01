@@ -1,5 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+    
 <%
     String ctxPath = request.getContextPath();
     //    /MyMVC
@@ -30,7 +33,7 @@
 	
 	
 	});
-
+	
 </script>
 
 </head>
@@ -56,9 +59,11 @@
 				<a href="<%= ctxPath %>/member/memberRegister.up">회원가입</a>
 			</div>
 			
-			<div class="col-md-4">
-				<a href="<%= ctxPath %>/member/memberList.jsp">회원목록</a>
-			</div>
+			<c:if test="${sessionScope.loginuser.userid eq 'admin'}">
+				<div class="col-md-4">
+					<a href="<%= ctxPath %>/member/memberList.up">회원목록</a>
+				</div>
+			</c:if>
 		</div>
 	</div>
 	
