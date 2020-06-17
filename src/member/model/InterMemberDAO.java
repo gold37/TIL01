@@ -36,5 +36,11 @@ public interface InterMemberDAO {
 	
 	// 관리자를 제외한 모든 회원 정보 조회하기
 	List<MemberVO> selectAllMember() throws SQLException;
+
+	// 페이징처리를 한 관리자를 제외한 모든 회원 정보 조회하기
+	List<MemberVO> selectPagingMember(HashMap<String, String> paraMap) throws SQLException;
+
+	// 페이징처리를 위한 전체회원에 대한 총페이지갯수 알아오기(select)
+	int getTotalPage(HashMap<String, String> paraMap) throws SQLException;
 	
 }

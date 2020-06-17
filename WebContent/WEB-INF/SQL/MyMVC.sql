@@ -430,3 +430,175 @@ commit;
 select *
 from mymvc_shopping_member
 order by idx desc;
+
+
+
+
+------- ***** 페이징 처리하기 ***** -------
+
+select rownum, idx, userid, name, email, gender
+--      행번호
+from mymvc_shopping_member
+where rownum between 1 and 10 -- 1페이지
+order by idx desc;
+
+-- rownum은 where 절에 바로 사용할 수 없다. 11 and 20은 2페이지인데 써보면 결과 아무것도 안나옴.
+-- 하지만 inline view를 쓰면 where절에서 사용할 수 있다.
+
+select RNO, idx, userid, name, email, gender
+from 
+(
+    select rownum AS RNO, idx, userid, name, email, gender
+    from
+    (
+    select idx, userid, name, email, gender
+    from mymvc_shopping_member
+    order by idx desc
+    ) V
+) T
+where T.RNO between 1 and 10; ------ 한페이지당 10개씩 보여주는 1 페이지 내용
+
+select RNO, idx, userid, name, email, gender
+from 
+(
+    select rownum AS RNO, idx, userid, name, email, gender
+    from
+    (
+    select idx, userid, name, email, gender
+    from mymvc_shopping_member
+    order by idx desc
+    ) V
+) T
+where T.RNO between 1 and 5; ------ 한페이지당 5개씩 보여주는 1 페이지 내용
+
+
+select RNO, idx, userid, name, email, gender
+from 
+(
+    select rownum AS RNO, idx, userid, name, email, gender
+    from
+    (
+    select idx, userid, name, email, gender
+    from mymvc_shopping_member
+    order by idx desc
+    ) V
+) T
+where T.RNO between 11 and 20; ------ 2 페이지 내용
+
+select RNO, idx, userid, name, email, gender
+from 
+(
+    select rownum AS RNO, idx, userid, name, email, gender
+    from
+    (
+    select idx, userid, name, email, gender
+    from mymvc_shopping_member
+    order by idx desc
+    ) V
+) T
+where T.RNO between 4 and 6; ------ 한 페이지당 3개씩 보여주는 2 페이지 내용
+
+select RNO, idx, userid, name, email, gender
+from 
+(
+    select rownum AS RNO, idx, userid, name, email, gender
+    from
+    (
+    select idx, userid, name, email, gender
+    from mymvc_shopping_member
+    order by idx desc
+    ) V
+) T
+where T.RNO between 21 and 30; ------ 3 페이지 내용
+
+---  1 페이지당 10명(개)씩 보여주려면 총 페이지갯수는 얼마일까요?
+select count(*)
+from mymvc_shopping_member; -- 행 갯수
+
+select (select count(*) from mymvc_shopping_member) / 10
+from dual; -- 20.7
+-- 1 2 3 4 5 ....... 18 19 20
+
+select 20.70, 21, ceil(20.7), ceil(21)
+from dual;
+
+select ceil ((select count(*) from mymvc_shopping_member) / 10) AS 총페이지수
+from dual; --21
+
+select ceil (count(*)/10) AS 총페이지수
+from mymvc_shopping_member; --21
+
+select ceil ((select count(*) from mymvc_shopping_member) / 5) AS 총페이지수
+from dual; --42
+
+select ceil ((select count(*) from mymvc_shopping_member) / 3) AS 총페이지수
+from dual;  --69
+
+
+
+
+-----------------------------------------------------------------------------------
+
+--- *** 검색된 결과물 페이징 처리하기 *** --- 
+select RNO, idx, userid, name, email, gender
+from 
+(
+    select rownum AS RNO, idx, userid, name, email, gender
+    from
+    (
+    select idx, userid, name, email, gender
+    from mymvc_shopping_member
+    where name like '%' || '태' || '%' --- 이름에 '태'가 있는 사람
+    order by idx desc
+    ) V
+) T
+where T.RNO between 1 and 10; ------ 한페이지당 10개씩 보여주는 1 페이지 내용
+
+
+select RNO, idx, userid, name, email, gender
+from 
+(
+    select rownum AS RNO, idx, userid, name, email, gender
+    from
+    (
+    select idx, userid, name, email, gender
+    from mymvc_shopping_member
+    where name like '%' || '태' || '%' --- 이름에 '태'가 있는 사람
+    order by idx desc
+    ) V
+) T
+where T.RNO between 1 and 5; ------ 한페이지당 5개씩 보여주는 1 페이지 내용
+
+
+select RNO, idx, userid, name, email, gender
+from 
+(
+    select rownum AS RNO, idx, userid, name, email, gender
+    from
+    (
+    select idx, userid, name, email, gender
+    from mymvc_shopping_member
+    where name like '%' || '태' || '%' --- 이름에 '태'가 있는 사람
+    order by idx desc
+    ) V
+) T
+where T.RNO between 1 and 3; ------ 한페이지당 3개씩 보여주는 1 페이지 내용
+
+
+---  검색된 결과물을 페이징 처리할때 1 페이지당 10명(개)씩 보여주려면 총 페이지갯수는 얼마일까요?
+select count(*)
+from mymvc_shopping_member
+where name like '%' || '태' || '%'; -- 행 갯수 100
+
+select ceil ( count(*)/ 10 ) AS 총페이지수
+from mymvc_shopping_member
+where name like '%' || '태' || '%'; -- 10
+
+select ceil ( count(*)/ 5 ) AS 총페이지수
+from mymvc_shopping_member
+where name like '%' || '태' || '%'; -- 20
+
+select ceil ( count(*)/ 3 ) AS 총페이지수
+from mymvc_shopping_member
+where name like '%' || '태' || '%'; -- 34
+

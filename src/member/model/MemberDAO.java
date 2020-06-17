@@ -13,6 +13,7 @@ import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.sql.DataSource;
 
+import oracle.net.aso.a;
 import util.security.AES256;
 import util.security.Sha256;
 
@@ -434,6 +435,181 @@ public class MemberDAO implements InterMemberDAO {
 		
 		return memberList;
 	
+	}
+	
+	// 페이징처리를 한 관리자를 제외한 모든 회원 정보 조회하기
+	@Override
+	public List<MemberVO> selectPagingMember(HashMap<String, String> paraMap) throws SQLException {
+		
+		List<MemberVO> memberList = new ArrayList<>();
+		
+		try {
+			conn = ds.getConnection();
+			
+			String sql = " select RNO, idx, userid, name, email, gender "+
+						 " from "+
+						 " ("+
+						 "    select rownum AS RNO, idx, userid, name, email, gender "+
+						 "    from"+
+						 "    ("+
+						 "    select idx, userid, name, email, gender "+
+						 "    from mymvc_shopping_member "+
+						 " 	  where userid != 'admin' ";
+						 
+				String searchWord = paraMap.get("searchWord");
+				String colname = ""; // 컬럼명
+				
+				if( searchWord != null && !searchWord.trim().isEmpty() ) {
+					
+					String searchType = paraMap.get("searchType");
+					
+					switch (searchType) {
+						case "name": // 검색대상이 이름이라면
+							colname = "name"; // 컬럼이름도 이름이 돼야한다.
+							break;
+							
+						case "userid":
+							colname = "userid";
+							break;
+							
+						case "email":
+							colname = "email";
+							break;
+	
+						default:
+							break;
+					}
+					
+					sql += " and "+colname+" like '%' || ? || '%' ";
+				
+				} // end of if ----------------------------------
+			
+					sql += "    order by idx desc "+
+						   "    ) V "+
+						   " ) T "+
+						   " where T.RNO between ? and ? ";
+			
+			pstmt = conn.prepareStatement(sql);
+
+			int currentShowPageNo = Integer.parseInt(paraMap.get("currentShowPageNo"));
+			int sizePerPage = Integer.parseInt(paraMap.get("sizePerPage"));
+			
+			if( searchWord != null && !searchWord.trim().isEmpty() ) { // 검색어가 있는 경우
+				
+				if("email".equals(colname))
+					pstmt.setString(1, aes.encrypt(searchWord));
+				else
+					pstmt.setString(1, searchWord);
+				
+				pstmt.setInt(2, (currentShowPageNo * sizePerPage) - (sizePerPage - 1));// 공식
+				pstmt.setInt(3, (currentShowPageNo * sizePerPage));// 공식
+				
+			}
+			else {
+				
+	            pstmt.setInt(1, (currentShowPageNo * sizePerPage) - (sizePerPage -1 ) );// 공식
+	            pstmt.setInt(2, (currentShowPageNo * sizePerPage) );// 공식
+	            
+	         }
+
+			rs = pstmt.executeQuery();
+			
+			while(rs.next()) {
+				MemberVO mvo = new MemberVO();
+				
+				mvo = new MemberVO();
+				mvo.setIdx(rs.getInt("idx"));
+				mvo.setUserid(rs.getString("userid"));
+				mvo.setName(rs.getString("name"));
+				mvo.setEmail(aes.decrypt(rs.getString("email"))); // 복호화
+			    mvo.setGender(rs.getString("gender"));
+			    
+			    memberList.add(mvo);
+			}
+			
+		} catch( UnsupportedEncodingException | GeneralSecurityException e) {
+			e.printStackTrace();
+		} finally {
+			close();
+		}
+		  System.out.println(memberList);
+          
+	      return memberList;
+
+	}
+
+	// 페이징처리를 위한 전체회원에 대한 총페이지갯수 알아오기(select)
+	@Override
+	public int getTotalPage(HashMap<String, String> paraMap) throws SQLException {
+		
+		int totalPage = 0;
+		
+		try {
+			conn = ds.getConnection();
+			
+			String sql = " select ceil (count(*)/?) AS totalPage " + 
+						 " from mymvc_shopping_member" +
+					  	 " where userid != 'admin' ";
+			
+			 
+			String searchWord = paraMap.get("searchWord");
+			String colname = ""; // 컬럼명
+			
+			if( searchWord != null && !searchWord.trim().isEmpty() ) {
+				
+				String searchType = paraMap.get("searchType");
+				
+				switch (searchType) {
+					case "name": // 검색대상이 이름이라면
+						colname = "name"; // 컬럼이름도 이름이 돼야한다.
+						break;
+						
+					case "userid":
+						colname = "userid";
+						break;
+						
+					case "email":
+						colname = "email";
+						break;
+
+					default:
+						break;
+				}
+				
+				sql += " and "+colname+" like '%' || ? || '%' ";
+			
+			} // end of if ----------------------------------
+			
+			
+			 pstmt = conn.prepareStatement(sql);
+	         
+	         if( searchWord != null && !searchWord.trim().isEmpty() ) {
+	            // 검색어가 있는 경우
+	            pstmt.setInt(1, Integer.parseInt(paraMap.get("sizePerPage")) );
+	            
+	            if("email".equals(colname)) // 컬럼이름이 이메일이면 암호화
+	            	pstmt.setString(2, aes.encrypt(searchWord));
+	            else // 아니면 그냥 
+	            	pstmt.setString(2,  searchWord);
+	         }
+	         else {
+	            // 검색어가 없는 경우
+	            pstmt.setInt(1, Integer.parseInt(paraMap.get("sizePerPage")) );
+	         }    
+	         
+	         rs = pstmt.executeQuery();
+	         
+	         rs.next();
+	         
+	         totalPage = rs.getInt("totalPage");
+	         
+	      } catch( UnsupportedEncodingException | GeneralSecurityException e) {
+				e.printStackTrace();
+	      } finally {
+	         close();
+	      }
+
+		return totalPage;
 	}
 	
 }

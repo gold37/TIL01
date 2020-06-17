@@ -27,7 +27,7 @@
       console.log("searchType : " + "${searchType}");
       console.log("searchWord : " + "${searchWord}");
      */
-    <%--
+
       if("${searchWord}" != "") {
     	  $("#searchType").val("${searchType}");
     	  $("#searchWord").val("${searchWord}");
@@ -47,12 +47,13 @@
 	  
 	  
 	  $("#searchWord").bind("keydown", function(event){
-		  if(event.keyCode == 13) {
+		  if(event.keyCode == 13) { // 엔터
 			  goSearch();
 		  }
 	  });
 	  
 	  
+	  <%--
 	  $("tr.memberInfo").click(function(){
 		  var idx = $(this).children(".idx").text();
 	   // alert(idx);
@@ -120,6 +121,6 @@
 	</table>
 
     <div>
-    	<%-- 페이지바가 들어올 자리 --%>
+    	${pageBar}
     </div>
 <jsp:include page="../footer.jsp" />
