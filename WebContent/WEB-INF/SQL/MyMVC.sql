@@ -602,3 +602,159 @@ select ceil ( count(*)/ 3 ) AS 총페이지수
 from mymvc_shopping_member
 where name like '%' || '태' || '%'; -- 34
 
+
+
+
+---------------------------------------------------------------------------------------------
+/*
+   카테고리 테이블명 : shopping_category
+
+   컬럼정의 
+     -- 카테고리 대분류 번호  : 시퀀스(seq_shopping_category_cnum)로 증가함.(Primary Key)
+     -- 카테고리 코드(unique) : ex) 전자제품  '100000'
+                                  의류      '200000'
+                                  도서      '300000' 
+     -- 카테고리명(not null)  : 전자제품, 의류, 도서           
+  
+*/ 
+ 
+create table shopping_category
+(cnum    number(8)     not null  -- 카테고리 대분류 번호
+,code    varchar2(20)  not null  -- 카테고리 코드
+,cname   varchar2(100) not null  -- 카테고리명
+,constraint PK_shopping_category_cnum primary key(cnum)
+,constraint UQ_shopping_category_code unique(code)
+);
+
+create sequence seq_shopping_category_cnum
+start with 1
+increment by 1
+nomaxvalue
+nominvalue
+nocycle
+nocache;
+
+insert into shopping_category values(seq_shopping_category_cnum.nextval, '100000', '전자제품');
+insert into shopping_category values(seq_shopping_category_cnum.nextval, '200000', '의류');
+insert into shopping_category values(seq_shopping_category_cnum.nextval, '300000', '도서');
+commit;
+
+-- 나중에 넣습니다.
+--insert into shopping_category values(seq_shopping_category_cnum.nextval, '400000', '식품');
+--commit;
+
+select cnum, code, cname
+from shopping_category
+order by cnum asc;
+
+
+create table shopping_spec
+(snum    number(8)     not null  -- 스펙번호       
+,sname   varchar2(100) not null  -- 스펙명         
+,constraint PK_shopping_spec_snum primary key(snum)
+,constraint UQ_shopping_spec_sname unique(sname)
+);
+
+create sequence seq_shopping_spec
+start with 1
+increment by 1
+nomaxvalue
+nominvalue
+nocycle
+nocache;
+
+insert into shopping_spec(snum, sname) values(seq_shopping_spec.nextval, 'HIT');
+insert into shopping_spec(snum, sname) values(seq_shopping_spec.nextval, 'NEW');
+insert into shopping_spec(snum, sname) values(seq_shopping_spec.nextval, 'BEST');
+
+commit;
+
+select snum, sname
+from shopping_spec
+order by snum asc;
+
+
+---- *** 제품 테이블 : shopping_product *** ----
+create table shopping_product
+(pnum           number(8) not null       -- 제품번호(Primary Key)
+,pname          varchar2(100) not null   -- 제품명
+,pcategory_fk   varchar2(20)             -- 카테고리코드(Foreign Key)
+,pcompany       varchar2(50)             -- 제조회사명
+,pimage1        varchar2(100) default 'noimage.png' -- 제품이미지1   이미지파일명
+,pimage2        varchar2(100) default 'noimage.png' -- 제품이미지2   이미지파일명 
+,pqty           number(8) default 0      -- 제품 재고량
+,price          number(8) default 0      -- 제품 정가
+,saleprice      number(8) default 0      -- 제품 판매가(할인해서 팔 것이므로)
+,pspec          varchar2(20)             -- 'HIT', 'BEST', 'NEW' 등의 값을 가짐.
+,pcontent       varchar2(4000)           -- 제품설명  varchar2는 varchar2(4000) 최대값이므로
+                                         --          4000 byte 를 초과하는 경우 clob 를 사용한다.
+                                         --          clob 는 최대 4GB 까지 지원한다.
+                                         
+,point          number(8) default 0      -- 포인트 점수                                         
+,pinputdate     date default sysdate     -- 제품입고일자
+,constraint  PK_shopping_product_pnum primary key(pnum)
+,constraint  FK_shopping_product foreign key(pcategory_fk) references shopping_category(code)
+);
+
+create sequence seq_shopping_product_pnum
+start with 1
+increment by 1
+nomaxvalue
+nominvalue
+nocycle
+nocache;
+
+insert into shopping_product(pnum, pname, pcategory_fk, pcompany, 
+                             pimage1, pimage2, pqty, price, saleprice,
+                             pspec, pcontent, point)
+values(seq_shopping_product_pnum.nextval, '스마트TV', '100000', '삼성',
+       'tv_samsung_h450_1.png','tv_samsung_h450_2.png',
+       100,1200000,800000,'HIT','42인치 스마트 TV. 기능 짱!!', 50);
+
+
+insert into shopping_product(pnum, pname, pcategory_fk, pcompany, 
+                             pimage1, pimage2, pqty, price, saleprice,
+                             pspec, pcontent, point)
+values(seq_shopping_product_pnum.nextval, '노트북', '100000', '엘지',
+       'notebook_lg_gt50k_1.png','notebook_lg_gt50k_2.png',
+       150,900000,750000,'HIT','노트북. 기능 짱!!', 30);  
+       
+
+insert into shopping_product(pnum, pname, pcategory_fk, pcompany, 
+                             pimage1, pimage2, pqty, price, saleprice,
+                             pspec, pcontent, point)
+values(seq_shopping_product_pnum.nextval, '바지', '200000', 'S사',
+       'cloth_canmart_1.png','cloth_canmart_2.png',
+       20,12000,10000,'HIT','예뻐요!!', 5);       
+       
+
+insert into shopping_product(pnum, pname, pcategory_fk, pcompany, 
+                             pimage1, pimage2, pqty, price, saleprice,
+                             pspec, pcontent, point)
+values(seq_shopping_product_pnum.nextval, '남방', '200000', '버카루',
+       'cloth_buckaroo_1.png','cloth_buckaroo_2.png',
+       50,15000,13000,'HIT','멋져요!!', 10);       
+       
+
+insert into shopping_product(pnum, pname, pcategory_fk, pcompany, 
+                             pimage1, pimage2, pqty, price, saleprice,
+                             pspec, pcontent, point)
+values(seq_shopping_product_pnum.nextval, '세계탐험보물찾기시리즈', '300000', '아이세움',
+       'book_bomul_1.png','book_bomul_2.png',
+       100,35000,33000,'HIT','만화로 보는 세계여행', 20);       
+       
+       
+insert into shopping_product(pnum, pname, pcategory_fk, pcompany, 
+                             pimage1, pimage2, pqty, price, saleprice,
+                             pspec, pcontent, point)
+values(seq_shopping_product_pnum.nextval, '만화한국사', '300000', '녹색지팡이',
+       'book_koreahistory_1.png','book_koreahistory_2.png',
+       80,130000,120000,'HIT','만화로 보는 이야기 한국사 전집', 60);
+       
+commit;     
+
+select pnum, pname, pcategory_fk, pcompany, pimage1, pimage2, pqty, price, saleprice, pspec, pcontent, point
+     , to_char(pinputdate, 'yyyy-mm-dd') as pinputdate
+from shopping_product
+where pspec = 'HIT'
+order by pnum asc;

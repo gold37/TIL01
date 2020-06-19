@@ -51,19 +51,47 @@
 	
 	<div id="headerLink">
 		<div class="row">
-			<div class="col-md-4">
+			<div class="col-md-1">
 				<a href="<%= ctxPath %>/index.up">HOME</a>
 			</div>
 			
-			<div class="col-md-4">
+			<div class="col-md-1">
 				<a href="<%= ctxPath %>/member/memberRegister.up">회원가입</a>
 			</div>
 			
-			<c:if test="${sessionScope.loginuser.userid eq 'admin'}">
-				<div class="col-md-4">
+			<c:if test="${sessionScope.loginuser.userid eq 'admin'}"> 
+										<!-- 관리자만 볼 수 있음 -->
+				<div class="col-md-3">
 					<a href="<%= ctxPath %>/member/memberList.up">회원목록</a>
 				</div>
 			</c:if>
+			
+			<div class="col-md-1">
+				<a href="<%= ctxPath %>/shop/mallHome.up">쇼핑몰 홈</a>
+			</div>
+			
+			<div class="col-md-1">
+				<a href="<%= ctxPath %>/shop/location.up">매장찾기</a>
+			</div>
+			
+			<c:if test="${sessionScope.loginuser != null}">
+				<div class="col-md-1">
+					<a href="<%= ctxPath %>/shop/cartList.up">장바구니</a>
+				</div>
+			</c:if>
+			
+			<c:if test="${sessionScope.loginuser != null}">
+				<div class="col-md-1">
+					<a href="<%= ctxPath %>/shop/orderList.up">주문내역</a>
+				</div>
+			</c:if>
+			
+			<c:if test="${sessionScope.loginuser.userid eq 'admin'}">
+				<div class="col-md-1">
+					<a href="<%= ctxPath %>/shop/admin/productRegister.up">제품등록</a>
+				</div>
+			</c:if>
+			
 		</div>
 	</div>
 	

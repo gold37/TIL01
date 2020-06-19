@@ -611,5 +611,63 @@ public class MemberDAO implements InterMemberDAO {
 
 		return totalPage;
 	}
+
+	
+	// idx 값을 입력받아 회원 1명에 대한 상세 정보 알아오기(select)
+	@Override
+	public MemberVO memberOneDetail(String idx) throws SQLException {
+		
+		MemberVO mvo = null;
+		
+		try {
+			conn = ds.getConnection();
+			
+			String sql = " select idx, userid, name, email, hp1, hp2, hp3, postcode, address, detailaddress, extraAddress, gender "+
+						 "     , substr(birthday,1,4) AS birthyyyy, substr(birthday,5,2) AS birthmm, substr(birthday, 7) AS birthdd "+
+						 "     , coin, point, to_char(registerday,'yyyy-mm-dd') AS registerday "+
+						 "     , trunc( months_between(sysdate, lastPwdChangeDate) ) AS pwdchangegap "+
+						 "     , trunc( months_between(sysdate, lastLoginDate) ) AS lastlogindategap "+
+						 " from mymvc_shopping_member \n"+
+						 " where idx = ? ";
+			
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, idx);
+			
+			rs = pstmt.executeQuery();
+			
+			if(rs.next()) {
+
+				mvo = new MemberVO();
+				mvo.setIdx(rs.getInt("idx"));
+				mvo.setUserid(rs.getString("userid"));
+				mvo.setName(rs.getString("name"));
+				mvo.setEmail(aes.decrypt(rs.getString("email"))); // 복호화
+				mvo.setHp1(rs.getString("hp1"));
+				mvo.setHp2(aes.decrypt(rs.getString("hp2"))); // 복호화
+				mvo.setHp3(aes.decrypt(rs.getString("hp3"))); // 복호화
+				mvo.setPostcode(rs.getString("postcode"));
+			    mvo.setAddress(rs.getString("address"));
+			    mvo.setDetailAddress(rs.getString("detailaddress"));
+			    mvo.setExtraAddress(rs.getString("extraaddress"));
+			    mvo.setGender(rs.getString("gender"));
+			    mvo.setBirthyyyy(rs.getString("birthyyyy"));
+			    mvo.setBirthmm(rs.getString("birthmm"));
+			    mvo.setBirthdd(rs.getString("birthdd"));
+			    mvo.setCoin(rs.getInt("coin"));   // int
+			    mvo.setPoint(rs.getInt("point")); // int
+			    mvo.setRegisterday(rs.getString("registerday"));
+			  
+			}
+			
+		} catch( UnsupportedEncodingException | GeneralSecurityException e) {
+			e.printStackTrace();
+		} finally {
+			close();
+		}
+		
+		return mvo;
+
+	
+	}
 	
 }

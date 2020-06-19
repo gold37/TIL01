@@ -42,5 +42,8 @@ public interface InterMemberDAO {
 
 	// 페이징처리를 위한 전체회원에 대한 총페이지갯수 알아오기(select)
 	int getTotalPage(HashMap<String, String> paraMap) throws SQLException;
+
+	// idx 값을 입력받아 회원 1명에 대한 상세 정보 알아오기(select)
+	MemberVO memberOneDetail(String idx) throws SQLException;
 	
 }

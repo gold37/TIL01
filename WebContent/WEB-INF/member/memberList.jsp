@@ -12,7 +12,7 @@
 
 <style type="text/css">
 	tr.memberInfo:hover {
-		background-color: #e6ffe6;
+		background-color: #fff;
 		cursor: pointer;
 	}
 </style>
@@ -52,15 +52,14 @@
 		  }
 	  });
 	  
-	  
-	  <%--
+
 	  $("tr.memberInfo").click(function(){
 		  var idx = $(this).children(".idx").text();
+		  					// 직속 자식 (tr태그 바로 아래에 있는 td태그)
 	   // alert(idx);
 	      location.href="<%= ctxPath%>/member/memberOneDetail.up?idx="+idx+"";  
 	  });
 
-      --%>
 	  
   });// end of $(document).ready()---------------------
   
@@ -109,8 +108,9 @@
         <tbody>
 		<%-- 일단은 페이징처리를 안한 모든 회원정보를 조회하도록 한다. --%>
 			<c:forEach var="mvo" items="${memberList}">
-				<tr>
-					<td>${mvo.idx}</td>
+				<tr class="memberInfo">
+					<td class="idx">${mvo.idx}</td>
+				<!-- tr태그에서 실제로 클릭한 곳의 idx값을 알아오기 위해서 class 줌 -->
 					<td>${mvo.userid}</td>
 					<td>${mvo.name}</td>
 					<td>${mvo.email}</td>
