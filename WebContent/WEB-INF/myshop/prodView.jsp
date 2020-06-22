@@ -1,0 +1,256 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %> 
+
+<jsp:include page="../header.jsp" />
+
+<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.css" /> 
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.js"></script>
+
+<style type="text/css">
+   .line {border: 0px solid red;
+          border-collapse: collapse;
+          margin-top: 20px;
+          margin-bottom: 20px; }
+          
+   li {margin-bottom: 10px;} 
+   
+   .customHeight {height: 100px;}
+   
+   button.btnCommentOK {position: relative; 
+                      top:-105px; 
+                      left:410px;
+                      width: 100px; 
+                      background-color: #4d4dff; 
+                      color: #fff; 
+                      border-style: none;
+                      cursor: pointer;
+   }
+   
+   textarea#commentContents {font-size: 12pt;}
+   
+   div#viewComments {width: 80%;
+                      margin: 3% 0 0 0; 
+                     text-align: left;
+                     max-height: 300px;
+                     overflow: auto;
+                     /* border: solid 1px red; */
+   }
+   
+   span.markColor {color: #ff0000; }
+   
+   div.customDisplay {display: inline-block;
+                      margin: 1% 3% 0 0;
+   }
+                   
+   div.commentDel {margin-bottom: 5%;
+                   font-size: 8pt;
+                   font-style: italic;
+                   cursor: pointer;
+   }         
+</style>
+
+<script type="text/javascript">
+   $(document).ready(function() {
+   /* 
+     $("#spinner").spinner( {
+         spin: function(event, ui) {
+            if(ui.value > 100) {
+               $(this).spinner("value", 100);
+               return false;
+            }
+            else if(ui.value < 1) {
+               $(this).spinner("value", 1);
+               return false;
+            }
+         }
+      } );// end of $("#spinner").spinner({});----------------      
+       */
+      
+      goCommentListView(); // 이미 등록된 제품후기를 보여주도록 하는 것
+       
+      // *** 제품후기 쓰기 ***//
+      $(".btnCommentOK").click(function(){
+    	  
+    	 if(${sessionScope.loginuser == null}) {
+   	 		 alert("제품사용 후기를 작성하시려면 먼저 로그인을 하셔야합니다.");
+   	 		 return;
+   	 	 }
+   	 	 
+   	 	 var commentContents = $("#commentContents").val().trim();
+   	 	 if(commentContents == "") {
+   	 		 alert("제품사용 후기 내용을 입력하세요!");
+   	 		 return;
+   	 	 }
+   	 	 
+   	 	 // jQuery에서 사용하는 것으로
+   	 	 // form 태그의 선택자.serialize();을 해주면 form 태그내의 모든 값들의 name값을 키값으로 만들어 보내준다.
+   	 	 var queryString = $("form[name=commentFrm]").serialize();
+   	 	/*  일반적으로 이렇게 부름  */
+   	 	// console.log(queryString); // commentContents=good&pnum=1
+   	 	
+   	 	$.ajax({
+   	 		url:"/MyMVC/shop/commentRegister.up",
+   	 		type:"POST",
+   	 		data:queryString,
+   	 		success:function() {
+   	 			/* alert("제품후기 글쓰기 성공!"); */
+   	 			
+   	 			// 정보를 읽어오는 함수 호출하기
+   	 			goCommentListView(); // 제품 후기 보여줌
+   	 			$("#commentContents").val("").focus(); // 적은 후기내용 등록하고 비워줌
+   	 			
+   	 		},
+	   	 	error: function(request, status, error){
+				alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
+			}
+   	 	});
+   	 	
+      });
+	 	 	 
+            
+   }); // end of $(document).ready();------------------------------
+   
+   
+   function golikeAdd(pnum) {
+   
+
+   }// end of golikeAdd(pnum)---------------
+   
+   
+   function godisLikeAdd(pnum) {
+ 
+      
+   }// end of golikeAdd(pnum)---------------
+   
+   
+   function goLikeDislikeCount() {
+      
+   }
+   
+   // 특정 제품의 제품후기 글들을 보여주는 함수
+   function goCommentListView() {
+	   $.ajax({
+		   url:"/MyMVC/shop/commentList.up",
+		   type:"GET",
+		   data:{"pnum":"${pvo.pnum}"},
+		   dataType:"JSON",
+		   success:function(json) {
+			    var html = "";
+				
+				if (json.length > 0) {    
+					$.each(json, function(index, item){
+					  html +=  "<div> <span class='markColor'>▶</span> "+item.commentContents+"</div>"
+					         + "<div class='customDisplay'>"+item.name+"</div>"      
+					         + "<div class='customDisplay'>"+item.writeDate+"</div>"
+					         + "<div class='customDisplay commentDel'>후기삭제</div>";
+					       
+					} ); 
+				}// end of if -----------------------
+				
+				else {
+					html += "<div>등록된 상품후기가 없습니다.</div>";
+				}// end of else ---------------------
+				
+				$("#viewComments").html(html);	   		   
+		   		
+				// == "#sideinfo" 의 height 값 설정해주기 == 
+				var contentHeight =	$("#content").height();
+				//	alert(contentHeight);
+				$("#sideinfo").height(contentHeight);
+		   },
+		   error: function(request, status, error){
+				alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
+		   }
+	   });
+   }
+   
+   function goCart(pnum) {
+      
+   }
+   
+</script>
+
+<div style="width: 95%;">
+   <div class="row">
+     <div class="col-md-12 line">
+         <span style="font-size: 15pt; font-weight: bold;">::: 제품 상세 정보 :::</span>
+     </div>
+   </div>
+   
+   <div class="row">
+      <div class="col-md-3 line">
+         <img src="/MyMVC/images/${pvo.pimage1}" style="width: 200px; height: 170px;" />
+      </div>
+      
+      <div class="col-md-9 line" align="left">
+          <ul style="list-style-type: none;">
+            <li><span style="color: red; font-size: 12pt; font-weight: bold;">${pvo.pspec}</span></li>
+            <li>제품번호: ${pvo.pnum}</li>
+            <li>제품이름: ${pvo.pname}</li>
+              <li>제품정가: <span style="text-decoration: line-through;"><fmt:formatNumber value="${pvo.price}" pattern="###,###" />원</span></li>
+              <li>제품판매가: <span style="color: blue; font-weight: bold;"><fmt:formatNumber value="${pvo.saleprice}" pattern="###,###" />원</span></li>
+              <li>할인율: <span style="color: maroon; font-weight: bold;">[${pvo.discountPercent}% 할인]</span></li>
+              <li>포인트: <span style="color: green; font-weight: bold;">${pvo.point} POINT</span></li>
+              <li>잔고갯수: <span style="color: maroon; font-weight: bold;">${pvo.pqty} 개</span></li>          
+          </ul>
+          
+       <%-- ==== 장바구니 담기 및 바로주문하기 폼 ==== --%>
+        <form name="cartOrderFrm">       
+          <ul style="list-style-type: none; margin-top: 50px;">
+             <li style="margin-bottom: 40px;">
+                 <label for="spinner">주문갯수:</label>
+                 <input id="spinner" name="oqty" value="1" style="width: 30px; height: 20px;">
+            </li>
+            <li>
+               <button type="button" class="btn btn-info" onClick="goCart('${pvo.pnum}');" style="margin-right: 10px;">장바구니담기</button>
+               <button type="button" class="btn btn-warning" onClick="goOrder('${pvo.pnum}');">바로주문하기</button>
+            </li>
+         </ul>
+         
+         <input type="hidden" name="pnum" value="${pvo.pnum}" />
+         <input type="hidden" name="saleprice" value="${pvo.saleprice}" />
+         
+         <input type="hidden" name="sumtotalprice" />
+         <input type="hidden" name="sumtotalpoint" />
+         
+         <input type="hidden" name="goBackURL" value="${goBackURL}" /> 
+        </form>          
+          
+      </div>
+   </div>
+   
+   <div class="row">
+     <div class="col-md-12 line">
+        <img src="/MyMVC/images/${pvo.pimage2}" style="width: 400px; height: 340px;" />
+     </div>
+   </div>
+   
+   
+   
+   <div class="row">
+     <div class="col-md-12 line">
+        <span style="color: white; font-weight: bold; font-size: 14pt; background-color: navy;">제품설명</span>
+        <p>${pvo.pcontent}</p>   
+     </div>
+   </div>
+   
+    <span style="font-size: 16pt; color: orange">제품사용 후기</span>
+    <div id="viewComments">
+    	<%-- 제품 사용후기 내용이 들어오는 곳  --%>
+    </div>
+    <form name="commentFrm">
+    	<div>
+    		<textarea cols="100" class="customHeight" name="commentContents" id="commentContents"></textarea>
+    	</div>
+    	<div>
+    		<button type="button" class="customHeight btnCommentOK">후기등록</button>
+    	</div>
+    		<input type="hidden" name="pnum" value="${pvo.pnum}" /> 
+    		<!-- 제품번호 알아오지만, 가림-->
+    </form>
+   
+</div>
+<jsp:include page="../footer.jsp" />

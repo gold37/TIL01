@@ -21,7 +21,7 @@ public class IndexController extends AbstractController {
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) 
 		throws Exception {
-	
+
 	//	System.out.println("--- 확인용 IndexController의 execute 메소드가 호출됨.");
 		
 	//	request.setAttribute("name", "홍길동");

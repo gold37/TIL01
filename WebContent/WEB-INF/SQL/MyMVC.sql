@@ -673,6 +673,13 @@ select snum, sname
 from shopping_spec
 order by snum asc;
 
+select *
+from shopping_product
+where to_char(pnum) = '1';
+
+select *
+from shopping_product
+where to_char(pnum) = '사용자의 장난';
 
 ---- *** 제품 테이블 : shopping_product *** ----
 create table shopping_product
@@ -758,3 +765,41 @@ select pnum, pname, pcategory_fk, pcompany, pimage1, pimage2, pqty, price, salep
 from shopping_product
 where pspec = 'HIT'
 order by pnum asc;
+
+select cnum, code, cname
+from shopping_category
+order by cnum asc;
+
+
+------------------------------------------------------------
+-------- **** 상품구매 후기 테이블 생성하기 **** ----------
+create table shopping_purchase_reviews
+(no                  number 
+,fk_userid           varchar2(20)   not null   --  사용자ID       
+,fk_pnum             number(8)      not null   -- 제품번호(foreign key)
+,reviewsContents     varchar2(4000) not null
+,writeDate           date default sysdate
+,constraint PK_purchase_reviews primary key(no)
+,constraint FK_purchase_reviews_userid foreign key(fk_userid) 
+                                       references mymvc_shopping_member(userid)
+,constraint FK_purchase_reviews_pnum foreign key(fk_pnum) 
+                                     references shopping_product(pnum)
+);
+
+create sequence seq_purchase_reviews
+start with 1
+increment by 1
+nomaxvalue
+nominvalue
+nocycle
+nocache;
+
+select *
+from shopping_purchase_reviews
+order by no desc;
+
+select no, name, fk_pnum, reviewsContents, to_char(writeDate, 'yyyy-mm-dd hh24:mi:ss') AS writeDate
+from shopping_purchase_reviews A join mymvc_shopping_member B
+on A.fk_userid = B.userid 
+where fk_pnum = 3
+order by no desc; 

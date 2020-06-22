@@ -102,8 +102,11 @@
 				<%@ include file="/WEB-INF/login/login.jsp" %> <!-- jsp파일 끼워넣기 -->
 			</div>
 		</div>
-		<div class="row">
+		
+		<%-- 카테고리 목록을 보여주는 부분 --%>
+		<div class="row" style="margin-top: 250px;">
 			<div class="col-md-12" id="sideconent" style="text-align: left; padding: 20px;">
+				<%@ include file="/WEB-INF/myshop/categoryList.jsp" %>
 			</div>
 		</div>	
 	</div>

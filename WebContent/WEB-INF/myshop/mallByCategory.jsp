@@ -6,27 +6,22 @@
 
 <jsp:include page="../header.jsp" />
 
-	<h2>::: 쇼핑몰 상품 :::</h2>
+	<h2>::: ${cname} 목록 :::</h2>
 	<br/>
 	
-	<%-- HIT 상품을 모두 가져와서 디스플레이 (페이징 처리 안 한것) --%>
+	<%-- 특정 카테고리에 대한 상품을 모두 가져와서 디스플레이 (페이징 처리 안 한것) --%>
 	<table style="width: 90%; border: solid 0px gray;">
-		<thead>
-			<tr>
-				<th colspan="4" class="th" style="font-size: 14pt; background-color: #e1e1d0; height: 30px; text-align:center; padding:15px 0;">- HIT 상품 -</th>
-			</tr>
-		</thead>
-		
+				
 		<tbody>
-			<c:if test="${empty hitList}">
+			<c:if test="${empty productList}">
 			   <tr>
 			   	  <td colspan="4" class="td" align="center">현재 상품 준비중...</td>
 			   </tr>			
 			</c:if>
 			
-			<c:if test="${not empty hitList}">
+			<c:if test="${not empty productList}">
 				<tr>
-				    <c:forEach var="pvo" items="${hitList}" varStatus="status">
+				    <c:forEach var="pvo" items="${productList}" varStatus="status">
 				    <!-- status.index 는 0 부터 시작해서 1씩 증가한다.
 				         status.count 는 1 부터 시작해서 1씩 증가한다. -->
 				       <td class="td" align="center" width="25%" style="padding: 20px 0;">
