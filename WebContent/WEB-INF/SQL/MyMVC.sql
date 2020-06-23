@@ -801,5 +801,154 @@ order by no desc;
 select no, name, fk_pnum, reviewsContents, to_char(writeDate, 'yyyy-mm-dd hh24:mi:ss') AS writeDate
 from shopping_purchase_reviews A join mymvc_shopping_member B
 on A.fk_userid = B.userid 
-where fk_pnum = 3
+where fk_pnum = 1
 order by no desc; 
+
+
+-------- **** 장바구니 테이블 생성하기 **** ----------
+
+ desc mymvc_shopping_member;
+ desc shopping_product;
+
+ create table shopping_cart
+ (cartno     number               not null   --  장바구니 번호             
+ ,fk_userid  varchar2(20)         not null   --  사용자ID            
+ ,fk_pnum    number(8)            not null   --  제품번호                
+ ,oqty       number(8) default 0  not null   --  주문량                   
+ ,status     number(1) default 1             --  삭제유무
+ ,constraint PK_shopping_cart_cartno primary key(cartno)
+ ,constraint FK_shopping_cart_fk_userid foreign key(fk_userid)
+                                        references mymvc_shopping_member(userid) 
+ ,constraint FK_shopping_cart_fk_pnum foreign key(fk_pnum)
+                                      references shopping_product(pnum)
+ ,constraint CK_shopping_cart_status check( status in(0,1) ) 
+ );
+
+ create sequence seq_shopping_cart_cartno
+ start with 1
+ increment by 1
+ nomaxvalue
+ nominvalue
+ nocycle
+ nocache;
+
+ comment on table shopping_cart
+ is '장바구니 테이블';
+
+ comment on column shopping_cart.cartno
+ is '장바구니번호(시퀀스명 : seq_jsp_cart_cartno)';
+
+ comment on column shopping_cart.fk_userid
+ is '회원ID  jsp_member 테이블의 userid 컬럼을 참조한다.';
+
+ comment on column shopping_cart.fk_pnum
+ is '제품번호 shopping_product 테이블의 pnum 컬럼을 참조한다.';
+
+ comment on column shopping_cart.oqty
+ is '장바구니에 담을 제품의 주문량';
+
+ comment on column shopping_cart.status
+ is '장바구니에 담겨져 있으면 1, 장바구니에서 비우면 0';
+
+ select *
+ from user_tab_comments;
+
+ select column_name, comments
+ from user_col_comments
+ where table_name = 'SHOPPING_CART';
+ 
+ select cartno, fk_userid, fk_pnum, oqty, status
+ from jsp_cart
+ order by cartno asc;
+  
+ desc shopping_product;
+ 
+ select A.cartno, A.fk_userid, A.fk_pnum, B.pname, B.pcategory_fk,
+        B.pimage1, B.price, B.saleprice, B.point, A.oqty, A.status
+ from shopping_cart A join shopping_product B
+ on A.fk_pnum = B.pnum
+ where A.status = 1 and A.fk_userid = 'leess'
+ order by A.cartno desc;
+ 
+ 
+ select A.cartno, A.fk_userid, A.fk_pnum, B.pname, B.pcategory_fk,
+        B.pimage1, B.price, B.saleprice, B.point, A.oqty, A.status
+ from shopping_cart A join shopping_product B
+ on A.fk_pnum = B.pnum
+ where A.status = 1 and A.fk_userid = 'seoyh'
+ order by A.cartno desc;
+ 
+ 
+ select cartno, fk_userid, fk_pnum, pname, pcategory_fk,
+        pimage1, price, saleprice, point, oqty, status
+ from 
+ (
+     select row_number() over (order by cartno desc) AS RNO,
+            A.cartno, A.fk_userid, A.fk_pnum, B.pname, B.pcategory_fk,
+            B.pimage1, B.price, B.saleprice, B.point, A.oqty, A.status
+     from shopping_cart A join shopping_product B
+     on A.fk_pnum = B.pnum
+     where A.status = 1 and A.fk_userid = 'seoyh' 
+ ) V 
+ where RNO between 1 and 3;
+ 
+ 
+ select cartno, fk_userid, fk_pnum, pname, pcategory_fk,
+        pimage1, price, saleprice, point, oqty, status
+ from 
+ (
+     select row_number() over (order by cartno desc) AS RNO,
+            A.cartno, A.fk_userid, A.fk_pnum, B.pname, B.pcategory_fk,
+            B.pimage1, B.price, B.saleprice, B.point, A.oqty, A.status
+     from shopping_cart A join shopping_product B
+     on A.fk_pnum = B.pnum
+     where A.status = 1 and A.fk_userid = 'seoyh' 
+ ) V 
+ where RNO between 4 and 6;
+ 
+ 
+ select cartno, fk_userid, fk_pnum, pname, pcategory_fk,
+        pimage1, price, saleprice, point, oqty, status
+ from 
+ (
+     select row_number() over (order by cartno desc) AS RNO,
+            A.cartno, A.fk_userid, A.fk_pnum, B.pname, B.pcategory_fk,
+            B.pimage1, B.price, B.saleprice, B.point, A.oqty, A.status
+     from shopping_cart A join shopping_product B
+     on A.fk_pnum = B.pnum
+     where A.status = 1 and A.fk_userid = 'seoyh' 
+ ) V 
+ where RNO between 7 and 9;
+
+
+select row_number() over(order by pnum desc) AS RNO
+    , C.cname, pnum, pname, pimage1, price, saleprice, point
+from shopping_category C LEFT JOIN shopping_product P 
+on C.code = P.pcategory_fk
+where C.code = 400000; 
+
+
+select nvl(sum(oqty * saleprice), 0) AS SUMTOTALPRICE
+     , nvl(sum(oqty * point), 0) AS SUMTOTALPOINT
+from shopping_cart A join shopping_product B
+on A.fk_pnum = B.pnum
+where status = 1 and fk_userid = 'seoyh';
+
+
+select nvl(sum(oqty * saleprice), 0) AS SUMTOTALPRICE
+     , nvl(sum(oqty * point), 0) AS SUMTOTALPOINT
+from shopping_cart A join shopping_product B
+on A.fk_pnum = B.pnum
+where status = 1 and fk_userid = 'hongkd';
+
+update shopping_cart set status = 1;
+commit;
+
+select cartno, fk_userid, fk_pnum, oqty, status
+from shopping_cart
+order by cartno asc;
+
+delete from shopping_cart 
+where status = 0;
+
+commit;

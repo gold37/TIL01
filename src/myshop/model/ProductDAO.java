@@ -304,6 +304,79 @@ public class ProductDAO implements InterProductDAO {
       
       return CommentList;   
    }
+   
+    // === 장바구니 담기 === 
+	// 장바구니 테이블에 해당 제품이 존재하지 않는 경우는 shoppin_cart 테이블에 insert 를 해야하고,
+	// 장바구니 테이블에 해당 제품이 존재하는 경우에 또 그 제품을 추가해서 장바구니 담기를 한다라면  shoppin_cart 테이블에 update 를 해야 한다. 
+	@Override
+	public int addCart(String userid, String pnum, String oqty)  throws SQLException {
+		
+		int result = 0;
+		
+		try {
+			 conn = ds.getConnection();
+			 
+			 /*
+			     먼저 장바구니 테이블(shopping_cart)에 어떤 회원이 새로운 제품을 넣는 것인지,
+			     아니면 또 다시 제품을 추가로 더 구매하는 것인지를 알아야 한다.
+			     이것을 알기위해서 어떤 회원이 어떤 제품을  장바구니 테이블(shopping_cart) 넣을때
+			     그 제품이 이미 존재하는지 select 를 통해서 알아와야 한다.
+			     
+			   ----------------------------------------------------
+			    cartno   fk_userid     fk_pnum   oqty  status
+			   -----------------------------------------------------
+			      1      leess          7         2     1
+			      2      leess          6         3     1
+			      3      hongkd         7         5     1
+			  */
+			 
+			 String sql = " select cartno "
+			 		    + " from shopping_cart "
+			 		    + " where status = 1 and"
+			 		    + " fk_userid = ? and"
+			 		    + " fk_pnum = ? ";
+			 
+			 pstmt = conn.prepareStatement(sql);
+			 pstmt.setString(1, userid);
+			 pstmt.setString(2, pnum);
+			 
+			 rs = pstmt.executeQuery();
+			 
+			 if(rs.next()) {
+				 // 어떤 제품을 추가로 장바구니에 넣고자 하는 경우
+				 
+				 int cartno = rs.getInt("cartno");
+				 
+				 sql = " update shopping_cart set oqty = oqty + ? "
+				 	 + " where cartno = ? ";
+				 
+				 pstmt = conn.prepareStatement(sql);
+				 pstmt.setInt(1, Integer.parseInt(oqty));
+				 pstmt.setInt(2, cartno);
+				 
+				 result = pstmt.executeUpdate();
+			 }
+			 else {
+				// 장바구니에 존재하지 않는 새로운 제품을 넣고자 하는 경우
+				 
+				 sql = " insert into shopping_cart(cartno, fk_userid, fk_pnum, oqty, status) "
+				 	 + " values(seq_shopping_cart_cartno.nextval, ?, ?, ?, default) ";
+				 
+				 pstmt = conn.prepareStatement(sql);
+				 pstmt.setString(1, userid);
+				 pstmt.setInt(2, Integer.parseInt(pnum));
+				 pstmt.setInt(3, Integer.parseInt(oqty));
+				 
+				 result = pstmt.executeUpdate();
+			 }
+			 
+		} finally {
+			close();
+		}
+		
+		return result;
+	}// end of int addCart(String userid, String pnum, String oqty) ---------------	
+
 
 
 

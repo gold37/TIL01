@@ -54,9 +54,10 @@
 
 <script type="text/javascript">
    $(document).ready(function() {
-   /* 
+
      $("#spinner").spinner( {
          spin: function(event, ui) {
+
             if(ui.value > 100) {
                $(this).spinner("value", 100);
                return false;
@@ -65,9 +66,10 @@
                $(this).spinner("value", 1);
                return false;
             }
+   
          }
       } );// end of $("#spinner").spinner({});----------------      
-       */
+
       
       goCommentListView(); // 이미 등록된 제품후기를 보여주도록 하는 것
        
@@ -168,7 +170,37 @@
    }
    
    function goCart(pnum) {
-      
+	   // pnum은 장바구니에 담을 제품번호를 뜻함
+	   
+	   // === 주문량에 대한 유효성 검사하기 === //
+	   var frm = document.cartOrderFrm;
+	   
+	   var regExp = /^[0-9]+$/;  // 숫자만 체크하는 정규표현식
+	   var oqty = frm.oqty.value;
+	   var bool = regExp.test(oqty);
+	   
+	   if(!bool) {
+		   // 숫자 이외의 값이 들어온 경우 
+		   alert("주문갯수는 1개 이상이어야 합니다.");
+		   frm.oqty.value = "1";
+		   frm.oqty.focus();
+		   return;
+	   }
+	   
+	   // 문자로 숫자가 들어온 경우
+	   oqty = parseInt(oqty);
+	   if(oqty < 1) {
+		   alert("주문갯수는 1개 이상이어야 합니다.");
+		   frm.oqty.value = "1";
+		   frm.oqty.focus();
+		   return;
+	   }
+	   
+	   // 1개 이상 주문한 경우
+	   frm.method = "POST"; // insert 하려면 get보다 post가 좋음
+	   frm.action = "/MyMVC/shop/cartAdd.up";
+	   frm.submit();
+	   
    }
    
 </script>
@@ -203,6 +235,7 @@
              <li style="margin-bottom: 40px;">
                  <label for="spinner">주문갯수:</label>
                  <input id="spinner" name="oqty" value="1" style="width: 30px; height: 20px;">
+                 			<!-- 전송하려면 name이 꼭 필요 -->
             </li>
             <li>
                <button type="button" class="btn btn-info" onClick="goCart('${pvo.pnum}');" style="margin-right: 10px;">장바구니담기</button>
@@ -216,7 +249,7 @@
          <input type="hidden" name="sumtotalprice" />
          <input type="hidden" name="sumtotalpoint" />
          
-         <input type="hidden" name="goBackURL" value="${goBackURL}" /> 
+         <input type="hidden" name="goBackURL" value="${goBackURL}" size="100" /> 
         </form>          
           
       </div>
