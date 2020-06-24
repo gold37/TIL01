@@ -377,7 +377,115 @@ public class ProductDAO implements InterProductDAO {
 		return result;
 	}// end of int addCart(String userid, String pnum, String oqty) ---------------	
 
+	
+	// 로그인한 사용자의 장바구니 목록 조회하기
+   @Override
+   public List<CartVO> selectProductCart(String userid) throws SQLException {
 
+      List<CartVO> cartList = null; // 장바구니에 아무것도 안담은 사람도 있기때문에
+      
+      try {
+         
+         conn = ds.getConnection();
+         
+         String sql = " select A.cartno, A.fk_userid, A.fk_pnum, B.pname, B.pcategory_fk, "+
+	                   "        B.pimage1, B.price, B.saleprice, B.point, A.oqty, A.status "+
+	                   " from shopping_cart A join shopping_product B "+
+	                   " on A.fk_pnum = B.pnum "+
+	                   " where A.status = 1 and A.fk_userid = ? "+
+	                   " order by A.cartno desc ";
+         
+         pstmt = conn.prepareStatement(sql);
+         pstmt.setString(1, userid);
+         
+         rs = pstmt.executeQuery();
+         
+         int cnt = 0;
+         while(rs.next()) {
+            cnt++;
+            
+            if(cnt == 1) {
+               cartList = new ArrayList<CartVO>();   // 한번만 만들 수 있게 만든다.
+            }
+            
+            int cartno = rs.getInt("cartno");
+            String fk_userid = rs.getString("fk_userid");
+            int fk_pnum = rs.getInt("fk_pnum");
+            String pname = rs.getString("pname");
+            String pcategory_fk = rs.getString("pcategory_fk");
+            String pimage1 = rs.getString("pimage1");
+            int price = rs.getInt("price");
+            int saleprice = rs.getInt("saleprice");
+            int point = rs.getInt("point");
+            int oqty = rs.getInt("oqty");  // 주문량 
+            int status = rs.getInt("status");
 
+            ProductVO prod = new ProductVO();
+            prod.setPnum(fk_pnum);
+            prod.setPname(pname);
+            prod.setPcategory_fk(pcategory_fk);
+            prod.setPimage1(pimage1);
+            prod.setPrice(price);
+            prod.setSaleprice(saleprice);
+            prod.setPoint(point);
+            
+            // *** !!! 중요함 !!! *** //
+            // ProductVO에서 작성된 메소드
+            prod.setTotalPriceTotalPoint(oqty);
+            // *** !!! 중요함 !!! *** //
+            
+            CartVO cvo = new CartVO();
+            cvo.setCartno(cartno);
+            cvo.setUserid(fk_userid);
+            cvo.setPnum(fk_pnum);
+            cvo.setOqty(oqty);
+            cvo.setStatus(status);
+            cvo.setProd(prod);
+            
+            cartList.add(cvo);            
+            
+         } // end of while -------------
+                  
+      } finally {
+         close();
+      }
+      
+      return cartList;
+   }
+
+   
+   // 로그인한 사용자의 장바구니에 담긴 주문총액 및 합계 포인트 구하기
+	@Override
+	public HashMap<String, String> selectCartSumPricePoint(String userid) throws SQLException {
+
+		HashMap<String, String> sumMap = new HashMap<>(); // 장바구니에 아무것도 안담은 사람도 있기때문에
+	      
+	      try {
+	         
+	         conn = ds.getConnection();
+	         
+	         String sql = "select nvl(sum(oqty * saleprice), 0) AS SUMTOTALPRICE "+
+		        		  "     , nvl(sum(oqty * point), 0) AS SUMTOTALPOINT "+
+		        		  " from shopping_cart A join shopping_product B "+
+		        		  " on A.fk_pnum = B.pnum "+
+		        		  " where status = 1 and fk_userid = ? ";
+	         
+	         pstmt = conn.prepareStatement(sql);
+	         pstmt.setString(1, userid);
+	         
+	         rs = pstmt.executeQuery();
+	         rs.next();
+	         
+	         sumMap.put("SUMTOTALPRICE", rs.getString("SUMTOTALPRICE"));
+	         sumMap.put("SUMTOTALPOINT", rs.getString("SUMTOTALPOINT"));
+	            
+	                  
+	      } finally {
+	         close();
+	      }
+	      
+	      return sumMap;
+	
+	}
 
 }

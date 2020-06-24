@@ -867,7 +867,7 @@ order by no desc;
         B.pimage1, B.price, B.saleprice, B.point, A.oqty, A.status
  from shopping_cart A join shopping_product B
  on A.fk_pnum = B.pnum
- where A.status = 1 and A.fk_userid = 'leess'
+ where A.status = 1 and A.fk_userid = 'jwjw'
  order by A.cartno desc;
  
  
@@ -875,7 +875,7 @@ order by no desc;
         B.pimage1, B.price, B.saleprice, B.point, A.oqty, A.status
  from shopping_cart A join shopping_product B
  on A.fk_pnum = B.pnum
- where A.status = 1 and A.fk_userid = 'seoyh'
+ where A.status = 1 and A.fk_userid = 'jwjw'
  order by A.cartno desc;
  
  
@@ -932,14 +932,27 @@ select nvl(sum(oqty * saleprice), 0) AS SUMTOTALPRICE
      , nvl(sum(oqty * point), 0) AS SUMTOTALPOINT
 from shopping_cart A join shopping_product B
 on A.fk_pnum = B.pnum
-where status = 1 and fk_userid = 'seoyh';
+where status = 1 and fk_userid = 'jwjw';
 
 
 select nvl(sum(oqty * saleprice), 0) AS SUMTOTALPRICE
      , nvl(sum(oqty * point), 0) AS SUMTOTALPOINT
 from shopping_cart A join shopping_product B
 on A.fk_pnum = B.pnum
-where status = 1 and fk_userid = 'hongkd';
+where status = 1 and fk_userid = 'jwjw';
+
+
+select oqty, saleprice, point
+from shopping_cart A join shopping_product B
+on A.fk_pnum = B.pnum
+where status = 1 and fk_userid = 'jwjw';
+
+select oqty, saleprice, point, oqty*saleprice, oqty*point
+from shopping_cart A join shopping_product B
+on A.fk_pnum = B.pnum
+where status = 1 and fk_userid = 'jwjw';
+
+
 
 update shopping_cart set status = 1;
 commit;

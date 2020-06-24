@@ -23,13 +23,18 @@ public interface InterProductDAO {
 
 	// *** Ajax 를 이용한 특정 제품의 상품후기를 조회해주기 
 	List<PurchaseReviewsVO> commentList(String pnum) throws SQLException;
-
 	
 	// 장바구니 담기
 	// 장바구니 테이블(shopping_cart)에 해당 제품을 담아야 한다.
 	// 장바구니 테이블에 해당 제품이 존재하지 않는 경우에는 shopping_cart 테이블에 insert 를 해야하고, 
 	// 장바구니 테이블에 해당 제품이 존재하는 경우에는 또 그 제품을 추가해서 장바구니 담기를 한다라면 shopping_cart 테이블에 update 를 해야한다. 
 	int addCart(String userid, String pnum, String oqty) throws SQLException;
+
+	// 로그인한 사용자의 장바구니 목록 조회하기
+	List<CartVO> selectProductCart(String userid) throws SQLException;
+
+	// 로그인한 사용자의 장바구니에 담긴 주문총액 및 합계 포인트 구하기
+	HashMap<String, String> selectCartSumPricePoint(String userid) throws SQLException;
 	
 	
 }
