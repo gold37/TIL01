@@ -36,5 +36,25 @@ public interface InterProductDAO {
 	// 로그인한 사용자의 장바구니에 담긴 주문총액 및 합계 포인트 구하기
 	HashMap<String, String> selectCartSumPricePoint(String userid) throws SQLException;
 	
+	// 장바구니 테이블에서 특정제품을 장바구니에서 비우기 
+	int delCart(String cartno) throws SQLException;
+
+	// 장바구니 테이블에서 특정제품 주문량 증가시키기
+	int updateCart(String cartno, String oqty) throws SQLException;
+
+	// spec 목록을 보여주고자 한다.
+	List<String> selectSpecList() throws SQLException;
 	
+	// 제품번호 채번 해오기
+	int getPnumOfProduct() throws SQLException; 
+
+	// shopping_product 테이블에 insert 하기
+	int productInsert(ProductVO pvo) throws SQLException;
+	
+	// shopping_product_imagefile 테이블에 추가이미지 파일명 insert 해주기 
+	int product_imagefile_Insert(int pnum, String attachFileName) throws SQLException;
+
+	// 제품번호를 가지고서 해당 제품의 추가된 이미지 정보를 조회해오기
+	List<String> getImagesByPnum(String pnum) throws SQLException;
+
 }

@@ -262,6 +262,16 @@
    </div>
    
    
+	<div class="row">
+		<c:if test="${not empty imgList}">
+			<c:forEach var="imgfilename" items="${imgList}">
+				<div class="col-md-3 line">
+				   <img src="/MyMVC/images/${imgfilename}" style="width: 200px; height: 170px;" />
+				</div>
+			</c:forEach>
+		</c:if>
+	</div>
+   
    
    <div class="row">
      <div class="col-md-12 line">

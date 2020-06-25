@@ -487,5 +487,218 @@ public class ProductDAO implements InterProductDAO {
 	      return sumMap;
 	
 	}
+	
+	
+	// 장바구니 테이블에서 특정제품을 장바구니에서 비우기 
+	@Override
+	public int delCart(String cartno) throws SQLException {
 
+		int n = 0;
+		
+		try {
+			conn = ds.getConnection();
+			
+			String sql = " update shopping_cart set status = 0 "
+					   + " where cartno = ? ";
+					   
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, cartno);
+			
+			n = pstmt.executeUpdate();
+			
+		} finally {
+			close();
+		}
+		
+		return n;
+	}
+	
+	
+	// 장바구니 테이블에서 특정제품 주문량 증가시키기
+	@Override
+	public int updateCart(String cartno, String oqty) throws SQLException {
+
+		int n = 0;
+		
+		try {
+			conn = ds.getConnection();
+			
+			String sql = " update shopping_cart set oqty = ? "
+					   + " where cartno = ? ";
+					   
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, oqty);
+			pstmt.setString(2, cartno);
+			
+			n = pstmt.executeUpdate();
+			
+		} finally {
+			close();
+		}
+		
+		return n;
+		
+		
+	}
+
+	
+	// spec 목록을 보여주고자 한다.
+	@Override
+	public List<String> selectSpecList() throws SQLException {
+
+		List<String> specList = new ArrayList<>();
+		
+		try {
+			conn = ds.getConnection();
+			
+			String sql = " select sname " + 
+					     " from shopping_spec " + 
+					     " order by snum asc ";
+			
+			pstmt = conn.prepareStatement(sql);
+			
+			rs = pstmt.executeQuery();
+			
+			while(rs.next()) {
+				specList.add(rs.getString("sname"));
+			}
+						
+		} finally {
+			close();
+		}
+		
+		return specList;		
+		
+	}
+
+	// 제품번호 채번 해오기
+	@Override
+	public int getPnumOfProduct() throws SQLException {
+		int pnum = 0;
+		
+		try {
+			 conn = ds.getConnection();
+			 
+			 String sql = " select seq_shopping_product_pnum.nextval AS PNUM " +
+					      " from dual ";
+					   
+			 pstmt = conn.prepareStatement(sql);
+			 rs = pstmt.executeQuery();
+			 			 
+			 rs.next();
+			 pnum = rs.getInt("PNUM");
+		
+		} finally {
+			close();
+		}
+		
+		return pnum;
+	}
+	
+	
+	// shopping_product 테이블에 insert 하기
+	@Override
+	public int productInsert(ProductVO pvo) throws SQLException {
+		
+		int result = 0;
+		
+		try {
+			conn = ds.getConnection();
+			
+			String sql = "insert into shopping_product(pnum, pname, pcategory_fk, pcompany "+
+					     " ,pimage1, pimage2, pqty, price, saleprice "+
+					     " ,pspec, pcontent, point) "+
+					     " values(?,?,?,?,?,?,?,?,?,?,?,?)";
+			
+			pstmt = conn.prepareStatement(sql);
+			
+			pstmt.setInt(1, pvo.getPnum());
+			pstmt.setString(2, pvo.getPname());
+			pstmt.setString(3, pvo.getPcategory_fk());    
+			pstmt.setString(4, pvo.getPcompany()); 
+			pstmt.setString(5, pvo.getPimage1());    
+			pstmt.setString(6, pvo.getPimage2()); 
+			pstmt.setInt(7, pvo.getPqty()); 
+			pstmt.setInt(8, pvo.getPrice());
+			pstmt.setInt(9, pvo.getSaleprice());
+			pstmt.setString(10, pvo.getPspec());
+			pstmt.setString(11, pvo.getPcontent());
+			pstmt.setInt(12, pvo.getPoint());
+				
+			result = pstmt.executeUpdate();
+			
+		} finally {
+			close();
+		}
+		
+		return result;		
+	}
+
+
+	// shopping_product_imagefile 테이블에 추가이미지 파일명 insert 해주기 
+	@Override
+	public int product_imagefile_Insert(int pnum, String attachFileName) throws SQLException {
+		
+		int result = 0;
+		
+		try {
+			conn = ds.getConnection();
+			
+			String sql = " insert into shopping_product_imagefile(imgfileno, fk_pnum, imgfilename) "+ 
+					     " values(seqImgfileno.nextval, ?, ?)";
+			
+			pstmt = conn.prepareStatement(sql);
+			
+			pstmt.setInt(1, pnum);
+			pstmt.setString(2, attachFileName);
+			
+			result = pstmt.executeUpdate();
+			
+		} finally {
+			close();
+		}
+		
+		return result;	
+	}
+	
+	// 제품번호를 가지고서 해당 제품의 추가된 이미지 정보를 조회해오기
+	@Override
+	public List<String> getImagesByPnum(String pnum) throws SQLException {
+		
+		List<String> imgList = null;
+		
+		try {
+			conn = ds.getConnection();
+			
+			String sql = " select imgfilename "+
+				         " from shopping_product_imagefile "+
+				         " where to_char(fk_pnum) = ? ";
+			
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, pnum);
+			
+			rs = pstmt.executeQuery();
+			
+			int cnt = 0;
+			
+			while(rs.next()) {
+				cnt++;
+				if(cnt==1) {
+					imgList = new ArrayList<String>();
+				}
+				
+				String imgfilename = rs.getString("imgfilename"); // 이미지파일명 
+				
+				imgList.add(imgfilename); 
+			}
+			
+		} finally {
+			close();
+		}
+		
+		return imgList;
+	}
+	
+	
+	
 }

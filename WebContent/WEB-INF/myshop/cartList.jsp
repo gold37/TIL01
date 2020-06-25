@@ -87,14 +87,15 @@
    
    function goOqtyEdit(obj) {
       
-      var index = $(".updateBtn").index(obj);
+      var index = $(".updateBtn").index(obj); // 여러개 수정 버튼 중 실제 클릭한 곳의 인덱스 번호를 알아옴
+    //alert(index);
       
-      var cartno = $(".cartno").eq(index).val();
-      var oqty = $(".oqty").eq(index).val();
+      var cartno = $(".cartno").eq(index).val(); // 장바구니 번호
+      var oqty = $(".oqty").eq(index).val(); // 수량을 알아와서 oqty변수에 넣음
       
       var regExp = /^[0-9]+$/g; // 숫자만 체크하는 정규표현식
       var bool = regExp.test(oqty);
-      
+  
       if(!bool) {
          alert("수정하시려는 수량은 0개 이상이어야 합니다.");
          location.href="javascript:history.go(0);";
@@ -110,7 +111,7 @@
                url:"/MyMVC/shop/cartEdit.up",
                type:"POST",
                data:{"cartno":cartno,
-                    "oqty":oqty},
+                     "oqty":oqty},
                dataType:"JSON",
                success:function(json){
                   if(json.n == 1) {
@@ -122,7 +123,6 @@
                }
             });
       }
-      
    }// end of function goOqtyEdit(obj)-----------------
    
    
@@ -131,8 +131,11 @@
       
       var $target = $(event.target);
       var pname = $target.parent().parent().find(".cart_pname").text();
+      					/* 두단계 위로 올라감. td->tr */
       var bool = confirm(pname+"을 장바구니에서 제거하시는 것이 맞습니까?");
-      
+      			/* 한번 더 물어봄 */
+    //alert(bool); // yes면 true 취소면 false
+
       if(bool) {
          
          $.ajax({
@@ -154,8 +157,7 @@
       else {
          alert("장바구니에서 "+pname+" 제품 삭제를 취소하셨습니다.");
       }
-      
-   }// end of function goDel(cartno)---------------------------
+   	}// end of function goDel(cartno)---------------------------
    
    
    // === 장바구니에서 제품 주문하기 === // 
@@ -172,14 +174,14 @@
        else {
             //// == 체크박스에서 체크된 value값(checked 속성이용) == ////
             ///  == 체크가 된 것만 값을 읽어와서 배열에 넣어준다. /// 
-              var allCnt = $("input:checkbox[name=pnum]").length;
-            
-               var pnumArr = new Array();
+            var allCnt = $("input:checkbox[name=pnum]").length;
+           
+            var pnumArr = new Array();
             var oqtyArr = new Array();
             var cartnoArr = new Array();
             var totalPriceArr = new Array();
             var totalPointArr = new Array();
-             
+            
              for(var i=0; i<allCnt; i++) {
                 if( $("input:checkbox[class=chkboxpnum]").eq(i).is(":checked") ) {
                   pnumArr.push( $("input:checkbox[class=chkboxpnum]").eq(i).val() );
@@ -314,8 +316,7 @@
                      
                      <%-- 장바구니번호 --%>
                      <input class="cartno" type="hidden" name="cartno" value="${cartvo.cartno}" />
-                     <%-- <button class="updateBtn" type="button" onclick="goOqtyEdit(this);">수정</button> --%>
-                     <button class="updateBtn" type="button" onclick="">수정</button>
+                     <button class="updateBtn" type="button" onclick="goOqtyEdit(this);">수정</button>
                </td>
                <td align="right"> <%-- 실제판매단가 및 포인트 --%> 
                    <fmt:formatNumber value="${cartvo.prod.saleprice}" pattern="###,###" /> 원
@@ -336,8 +337,7 @@
                    <input class="totalPoint" type="hidden" value="${cartvo.prod.totalPoint}" />
                </td>
                <td align="center"> <%-- 장바구니에서 해당 제품 삭제하기 --%> 
-                     <%-- <span class="del" style="cursor: pointer;" onClick="goDel('${cartvo.cartno}');">삭제</span>  --%>
-                     <span class="del" style="cursor: pointer;" onClick="">삭제</span>
+                     <span class="del" style="cursor: pointer;" onClick="goDel('${cartvo.cartno}');">삭제</span>
                </td>
             </tr>
            </c:forEach>

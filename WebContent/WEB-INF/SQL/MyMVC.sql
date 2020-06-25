@@ -643,6 +643,12 @@ commit;
 --insert into shopping_category values(seq_shopping_category_cnum.nextval, '400000', '식품');
 --commit;
 
+insert into shopping_category values(seq_shopping_category_cnum.nextval, '500000', '신발');
+commit;
+
+delete from shopping_category 
+where code = '500000';
+
 select cnum, code, cname
 from shopping_category
 order by cnum asc;
@@ -769,6 +775,58 @@ order by pnum asc;
 select cnum, code, cname
 from shopping_category
 order by cnum asc;
+
+
+
+----- >>> 하나의 제품속에 여러개의 이미지 파일 넣어주기 <<< ------ 
+select *
+from shopping_product
+order by pnum;  
+
+create table shopping_product_imagefile
+(imgfileno     number         not null   -- 시퀀스로 입력받음.
+,fk_pnum       number(8)      not null   -- 제품번호(foreign key)
+,imgfilename   varchar2(100)  not null   -- 제품이미지파일명
+,constraint PK_shopping_product_imagefile primary key(imgfileno)
+,constraint FK_shopping_product_imagefile foreign key(fk_pnum) references shopping_product(pnum)
+);
+
+
+create sequence seqImgfileno
+start with 1
+increment by 1
+nomaxvalue
+nominvalue
+nocycle
+nocache;
+
+select imgfileno, fk_pnum, imgfilename
+from shopping_product_imagefile
+order by imgfileno desc;
+
+
+select A.cname, pnum, pname, pcategory_fk, pcompany, pimage1, pimage2, pqty, price, saleprice, pspec, pcontent, point 
+	 , to_char(pinputdate, 'yyyy-mm-dd') as pinputdate
+from jsp_category A left join shopping_product B 
+on A.code = B.pcategory_fk 
+where A.code = '400000'
+order by pnum desc;
+
+select *
+from shopping_product
+where pnum = 'asfsdfsfsdfsdfsdfsdf';
+
+select *
+from shopping_product
+where pnum = '3';
+ 
+select *
+from shopping_product
+where to_char(pnum) = 'asfsdfsfsdfsdfsdfsdf'; 
+
+select *
+from shopping_product
+where to_char(pnum) = '3'; 
 
 
 ------------------------------------------------------------
@@ -960,6 +1018,11 @@ commit;
 select cartno, fk_userid, fk_pnum, oqty, status
 from shopping_cart
 order by cartno asc;
+
+update shopping_cart set status = 1;
+commit;
+
+update shopping_cart set oqty = oqty +
 
 delete from shopping_cart 
 where status = 0;

@@ -9,6 +9,7 @@ import javax.servlet.http.HttpSession;
 
 import common.controller.AbstractController;
 import member.model.MemberVO;
+import my.util.MyUtil;
 import myshop.model.*;
 
 public class CartListAction extends AbstractController {
@@ -46,6 +47,10 @@ public class CartListAction extends AbstractController {
 			request.setAttribute("cartList", cartList);
 			request.setAttribute("sumMap", sumMap);
 
+			request.setAttribute("goBackURL", MyUtil.getCurrentURL(request));
+											/*   ▲ 현재보고 있는 페이지 URL */
+			/* 자주쓰는건 부모클래스의 메소드로 빼던지 유틸리티로 빼야됨. 지금은 MyUtil로 뺌 */
+			
 			super.setRedirect(false);
 			super.setViewPage("/WEB-INF/myshop/cartList.jsp");
 		}
