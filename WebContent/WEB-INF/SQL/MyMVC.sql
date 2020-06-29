@@ -1028,3 +1028,45 @@ delete from shopping_cart
 where status = 0;
 
 commit;
+
+
+
+-------- **** 매장찾기(카카오지도) 테이블 생성하기 **** ----------
+create table shopping_map 
+(storeID       varchar2(20) not null   --  매장id
+,storeName     varchar2(100) not null  --  매장명
+,storeUrl      varchar2(200)            -- 매장 홈페이지(URL)주소
+,storeImg      varchar2(200) not null   -- 매장소개 이미지파일명  
+,storeAddress  varchar2(200) not null   -- 매장주소 및 매장전화번호
+,lat           number not null          -- 위도
+,lng           number not null          -- 경도 
+,zindex        number not null          -- zindex 
+,constraint PK_shopping_map primary key(storeID)
+,constraint UQ_shopping_map_zindex unique(zindex)
+);
+
+create sequence seq_shopping_map_zindex
+start with 1
+increment by 1
+nomaxvalue
+nominvalue
+nocycle
+nocache;
+
+insert into shopping_map(storeID, storeName, storeUrl, storeImg, storeAddress, lat, lng, zindex)
+values('store1','롯데백화점 본점','https://place.map.kakao.com/7858517','lotte02.png','서울 중구 을지로 30 (T)02-771-2500',37.56511284953554,126.98187860455485,1);
+
+insert into shopping_map(storeID, storeName, storeUrl, storeImg, storeAddress, lat, lng, zindex)
+values('store2','KH정보교육원 종로지원','https://place.map.kakao.com/276378404','kh01.png','서울 중구 남대문로 120 대일빌딩 2,3층 (T)1544-9970',37.56800975043258,126.9832248918777,2);
+
+insert into shopping_map(storeID, storeName, storeUrl, storeImg, storeAddress, lat, lng, zindex)
+values('store3','미래에셋센터원빌딩','https://place.map.kakao.com/13057692','miraeeset.png','서울 중구 을지로5길 26 (T)02-6030-0100',37.567386065415086,126.98512381778167,3);
+
+insert into shopping_map(storeID, storeName, storeUrl, storeImg, storeAddress, lat, lng, zindex)
+values('store4','신세계백화점 본점','https://place.map.kakao.com/7969138','shinsegae.png','서울 중구 소공로 63 (T)1588-1234',37.56091181255155,126.98098265772731,4);
+
+commit;
+
+select storeID, storeName, storeUrl, storeImg, storeAddress, lat, lng, zindex
+from shopping_map
+order by zindex asc;

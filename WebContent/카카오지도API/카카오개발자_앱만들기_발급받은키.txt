@@ -1,0 +1,18 @@
+https://developers.kakao.com
+로그인ID : ww88@daum.net
+암호 : 기존과동일함.
+
+Web개발용지도
+애플리케이션(앱) ID : 453664
+
+네이티브 앱 키
+cf7a23820ef2364b4c39b52a0b0f17c0
+
+REST API 키
+03fec3cc096eb6427714f85342a7c3a5
+
+JavaScript 키
+a4771c42be8b0cd98ac0c685601d1979
+
+Admin 키
+d51fe4375df9f56341277de0b5fa4a27

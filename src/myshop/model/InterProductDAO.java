@@ -57,4 +57,7 @@ public interface InterProductDAO {
 	// 제품번호를 가지고서 해당 제품의 추가된 이미지 정보를 조회해오기
 	List<String> getImagesByPnum(String pnum) throws SQLException;
 
+	// shopping_map(위도,경도) 테이블에 있는 정보 가져오기
+	List<HashMap<String, String>> selectStoreMap() throws SQLException;
+
 }
