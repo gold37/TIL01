@@ -736,6 +736,100 @@ public class ProductDAO implements InterProductDAO {
 		
 		return storeList;
 	}
+	
+
+	// Ajax(JSON)를 사용하여 HIT 상품의 전체 개수 알아오기
+	@Override
+	public int totalPspecCount(String pspec) throws SQLException {
+		
+		int totalCount = 0;
+		
+		try {
+			conn = ds.getConnection();
+			
+			String sql = " select count(*) as CNT "
+					   + " from shopping_product "
+					   + " where pspec = ? ";
+			
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, pspec);
+			
+			rs = pstmt.executeQuery();
+			
+			rs.next();
+			
+			totalCount = rs.getInt("CNT");
+			
+		} finally {
+			close();
+		}
+		
+		return totalCount;
+	}
+	
+	
+	
+	// Ajax(JSON)를 사용하여 더보기 방식(페이징처리)으로 상품정보를 잘라서 (startRno ~ endRno) 조회해오기
+	@Override
+	public List<ProductVO> selectByPspec(HashMap<String, String> paraMap) throws SQLException {
+
+	
+		List<ProductVO> productList = new ArrayList<>(); 
+		
+		try {
+			conn = ds.getConnection();
+
+			String sql = " select pnum, pname, pcategory_fk, pcompany, pimage1, pimage2, pqty, price, saleprice, pspec, pcontent, point, pinputdate "+
+						 " from "+
+						 " ( "+
+						 " select row_number () over(order by pnum asc) as RNO "+
+						 "     , pnum, pname, pcategory_fk, pcompany, pimage1, pimage2, pqty, price, saleprice, pspec, pcontent, point "+
+						 "     , to_char(pinputdate, 'yyyy-mm-dd') as pinputdate "+
+						 " from shopping_product "+
+						 " where pspec = ? "+
+						 " )V "+
+						 " where RNO between ? and ? ";
+			
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, paraMap.get("pspec"));
+			pstmt.setString(2, paraMap.get("startRno"));
+			pstmt.setString(3, paraMap.get("endRno"));
+
+			rs = pstmt.executeQuery();
+			
+			while(rs.next()) {
+				
+				int    pnum = rs.getInt("pnum");                     // 제품번호
+				String pname = rs.getString("pname");                // 제품명
+				String pcategory_fk = rs.getString("pcategory_fk");  // 카테고리코드
+				String pcompany = rs.getString("pcompany");          // 제조회사명
+				String pimage1 = rs.getString("pimage1");            // 제품이미지1
+				String pimage2 = rs.getString("pimage2");            // 제품이미지2
+				int    pqty = rs.getInt("pqty");                     // 제품 재고량
+				int    price = rs.getInt("price");                   // 제품 정가
+				int    saleprice = rs.getInt("saleprice");           // 제품 판매가
+				String pspec = rs.getString("pspec");                       // "HIT", "BEST", "NEW" 등의 값을 가짐 
+				String pcontent = rs.getString("pcontent");          // 제품설명
+				int    point = rs.getInt("point");                   // 포인트 점수
+				String pinputdate = rs.getString("pinputdate");      // 제품입고일자
+				
+				ProductVO pvo = new ProductVO (pnum, pname, pcategory_fk, pcompany, pimage1, pimage2,pqty, price, saleprice, pspec, pcontent, point, pinputdate);
+				
+				productList.add(pvo);
+				
+			} // end of while {} --------------
+			
+		} finally {
+			close();
+		}
+		
+		
+		return productList;
+	
+	
+	
+	
+	}
 
 	
 }

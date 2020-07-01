@@ -13,4 +13,20 @@
 	
 </div>
 </body>
+
+<script type="text/javascript">
+
+	function func_height() {
+
+		var content_height = $("div#content").height(); 
+		// header.jsp의 하단에 표시된 div content의 height 값
+		
+		$("div#sideinfo").height(content_height);
+		// header.jsp의 div sideinfo의 height값으로 설정하기
+		
+	}
+	
+</script>
+
+
 </html>

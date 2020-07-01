@@ -16,27 +16,52 @@
 
 <script type="text/javascript">
 	
+	var lenHIT = 8;
+	// HIT 상품 스크롤할때 보여줄 상품의 개수(단위)
+
+	var start = 1;
+	
 	$(document).ready(function(){
 		
 		$("#countHIT").hide();
 		$("#totalHITCount").hide();
 		
-		// HIT 상품 게시물을 더보기 위하여 '더보기' 버튼 클릭 액션에 대한 초기값 호출하기 //
-		// 즉, 맨 처음에는 '더보기' 버튼을 클릭하지 않더라도 클릭한것처럼 일단 상품 8개를 보여줘야함 
-		displayHIT("1");
+		// HIT 상품 게시물을 더보기 위해 초기값 호출출하기 
+		displayHIT(start);
 		
-		// HIT 상품 게시물을 더보기 위하여 '더보기' 버튼 클릭 액션의 이벤트 등록하기
-		$("#btnMoreHIT").click(function(){
-			if($(this).text() == "처음으로") {
-				// 글자가 바뀌면
+		// 스크롤 이벤트 발생시키기
+		$(window).scroll(function(){
+			
+			// 스크롤탑의 위치값 (스크롤 ^ 표시와 회색 바 넓이)
+		//	console.log("$(window).scrollTop() => " + $(window).scrollTop());
+			// $(window).scrollTop() => 674
+
+			// 웹브라우저 창의 높이값 (고정된 값임)
+		//	console.log("$(window).height() => " + $(window).height());
+			// $(window).height() => 662
+			
+			// 보여줘야할 문서(더보기를 해주므로 append 돼서 높이가 계속 증가함)의 높이값
+		//	console.log("$(document).height() => " + $(document).height());
+			// $(document).height() => 1336
+			
+			
+			if( $(window).scrollTop() >= $(document).height() - $(window).height() ) {
+				/* 스크롤탑의 위치값				      보여줘야할 문서 높이 - 창 높이   */
+			
+				start = start + lenHIT;
+				displayHIT(start);
+			}
+			
+			else if($(window).scrollTop()== 0) {
+				// 다시 처음부터 시작하도록 함
 				$("#displayHIT").empty();
 				$("#end").empty();
-				displayHIT("1");
-				$(this).text("더보기");
+				$("#countHIT").text("0");
+				
+				start = 1; // 증가된 start 다시 초기화
+				displayHIT(start);
 			}
-			else {
-				displayHIT($(this).val());
-			}
+			
 		});
 		
 	}); // end of $(document).ready(function())---------------------------
@@ -75,10 +100,6 @@
 		    		// HIT 상품 결과를 출력하기
 		    		$("#displayHIT").html(html);
 		    		
-		    		// 더보기... 버튼의 비활성화 처리
-		    		$("#btnMoreHIT").attr("disabled", true).css("cursor","not-allowed");
-
-					
 				}
 				
 				else {
@@ -104,13 +125,6 @@
 					$("#displayHIT").append(html); 
 					// 				 ▲ 차곡차곡 쌓아서 보여줌
 					
-					// >>> (중요) 더보기 버튼의 value 속성에 값 지정하기 <<< //
-					$("#btnMoreHIT").val(Number(start)+lenHIT);
-					// 더보기... 버튼의 value 값이 9 로 변경된다.
-		    		// 더보기... 버튼의 value 값이 17 로 변경된다.
-		    		// 더보기... 버튼의 value 값이 25 로 변경된다.
-		    		// 더보기... 버튼의 value 값이 33 로 변경된다.
-
 		    		// countHIT에 지금까지 출력된 누적된 상품의 개수를 기록한다.
 		    		$("#countHIT").text( Number($("#countHIT").text()) + json.length );
 		    		
@@ -195,7 +209,6 @@
 		<!-- ▲ 실제 상품정보가 8개씩 들어옴 -->
 		<div style="margin: 20px 0;">
 			<span id="end" style="font-size:  16pt; font-weight: bold; color: red;"></span><br/>
-			<button type="button" id="btnMoreHIT" value="">더보기</button>
 			<span id="totalHITCount">${totalHITCount}</span>
 			<span id="countHIT">0</span> <!-- 지금까지 누적해서 본 상품 수 8+8+.. -->
 		</div>

@@ -60,4 +60,12 @@ public interface InterProductDAO {
 	// shopping_map(위도,경도) 테이블에 있는 정보 가져오기
 	List<HashMap<String, String>> selectStoreMap() throws SQLException;
 
+	// Ajax(JSON)를 사용하여 HIT 상품의 전체 개수 알아오기
+	int totalPspecCount(String pspec) throws SQLException;
+
+	// Ajax(JSON)를 사용하여 더보기 방식(페이징처리)으로 상품정보를 잘라서 (startRno ~ endRno) 조회해오기
+	List<ProductVO> selectByPspec(HashMap<String, String> paraMap) throws SQLException;
+	
+	
+
 }

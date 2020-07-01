@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
+	<%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
@@ -33,7 +33,6 @@
 		
 		$("#sideconent").html(vhtml);
 	*/
-	
 	
 	});
 	
@@ -72,6 +71,10 @@
 			<div class="col-md-1">
 				<a href="<%= ctxPath %>/shop/mallHome.up">쇼핑몰 홈</a>
 			</div>
+
+			<div class="col-md-1">
+				<a href="<%= ctxPath %>/shop/mallHome2.up">쇼핑몰 홈2</a>
+			</div>
 			
 			<div class="col-md-1">
 				<a href="<%= ctxPath %>/shop/location.up">매장찾기</a>
@@ -90,7 +93,7 @@
 			</c:if>
 			
 			<c:if test="${sessionScope.loginuser.userid eq 'admin'}">
-				<div class="col-md-1">
+				<div class="col-md-2">
 					<a href="<%= ctxPath %>/shop/admin/productRegister.up">제품등록</a>
 				</div>
 			</c:if>

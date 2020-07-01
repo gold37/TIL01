@@ -764,6 +764,374 @@ values(seq_shopping_product_pnum.nextval, '만화한국사', '300000', '녹색�
        'book_koreahistory_1.png','book_koreahistory_2.png',
        80,130000,120000,'HIT','만화로 보는 이야기 한국사 전집', 60);
        
+
+-----------------------------------------------------------------------
+insert into shopping_product(pnum, pname, pcategory_fk, pcompany, 
+                        pimage1, pimage2, pqty, price, saleprice,
+                        pspec, pcontent, point)
+values(seq_shopping_product_pnum.nextval, '노트북1', '100000', 'DELL',
+       '1.jpg','2.jpg',
+       100,1200000,1000000,'HIT','1번 노트북', 60);
+
+insert into shopping_product(pnum, pname, pcategory_fk, pcompany, 
+                        pimage1, pimage2, pqty, price, saleprice,
+                        pspec, pcontent, point)
+values(seq_shopping_product_pnum.nextval, '노트북2', '100000', '에이서',
+       '3.jpg','4.jpg',
+       100,1200000,1000000,'HIT','2번 노트북', 60);
+
+insert into shopping_product(pnum, pname, pcategory_fk, pcompany, 
+                        pimage1, pimage2, pqty, price, saleprice,
+                        pspec, pcontent, point)
+values(seq_shopping_product_pnum.nextval, '노트북3', '100000', 'LG전자',
+       '5.jpg','6.jpg',
+       100,1200000,1000000,'HIT','3번 노트북', 60);
+
+insert into shopping_product(pnum, pname, pcategory_fk, pcompany, 
+                        pimage1, pimage2, pqty, price, saleprice,
+                        pspec, pcontent, point)
+values(seq_shopping_product_pnum.nextval, '노트북4', '100000', '레노버',
+       '7.jpg','8.jpg',
+       100,1200000,1000000,'HIT','4번 노트북', 60);
+
+insert into shopping_product(pnum, pname, pcategory_fk, pcompany, 
+                        pimage1, pimage2, pqty, price, saleprice,
+                        pspec, pcontent, point)
+values(seq_shopping_product_pnum.nextval, '노트북5', '100000', '삼성전자',
+       '9.jpg','10.jpg',
+       100,1200000,1000000,'HIT','5번 노트북', 60);
+
+insert into shopping_product(pnum, pname, pcategory_fk, pcompany, 
+                        pimage1, pimage2, pqty, price, saleprice,
+                        pspec, pcontent, point)
+values(seq_shopping_product_pnum.nextval, '노트북6', '100000', 'HP',
+       '11.jpg','12.jpg',
+       100,1200000,1000000,'HIT','6번 노트북', 60);
+
+insert into shopping_product(pnum, pname, pcategory_fk, pcompany, 
+                        pimage1, pimage2, pqty, price, saleprice,
+                        pspec, pcontent, point)
+values(seq_shopping_product_pnum.nextval, '노트북7', '100000', '레노버',
+       '13.jpg','14.jpg',
+       100,1200000,1000000,'HIT','7번 노트북', 60);
+
+insert into shopping_product(pnum, pname, pcategory_fk, pcompany, 
+                        pimage1, pimage2, pqty, price, saleprice,
+                        pspec, pcontent, point)
+values(seq_shopping_product_pnum.nextval, '노트북8', '100000', 'LG전자',
+       '15.jpg','16.jpg',
+       100,1200000,1000000,'HIT','8번 노트북', 60);
+
+insert into shopping_product(pnum, pname, pcategory_fk, pcompany, 
+                        pimage1, pimage2, pqty, price, saleprice,
+                        pspec, pcontent, point)
+values(seq_shopping_product_pnum.nextval, '노트북9', '100000', '한성컴퓨터',
+       '17.jpg','18.jpg',
+       100,1200000,1000000,'HIT','9번 노트북', 60);
+
+insert into shopping_product(pnum, pname, pcategory_fk, pcompany, 
+                        pimage1, pimage2, pqty, price, saleprice,
+                        pspec, pcontent, point)
+values(seq_shopping_product_pnum.nextval, '노트북10', '100000', 'MSI',
+       '19.jpg','20.jpg',
+       100,1200000,1000000,'HIT','10번 노트북', 60);
+
+insert into shopping_product(pnum, pname, pcategory_fk, pcompany, 
+                        pimage1, pimage2, pqty, price, saleprice,
+                        pspec, pcontent, point)
+values(seq_shopping_product_pnum.nextval, '노트북11', '100000', 'LG전자',
+       '21.jpg','22.jpg',
+       100,1200000,1000000,'HIT','11번 노트북', 60);
+
+insert into shopping_product(pnum, pname, pcategory_fk, pcompany, 
+                        pimage1, pimage2, pqty, price, saleprice,
+                        pspec, pcontent, point)
+values(seq_shopping_product_pnum.nextval, '노트북12', '100000', 'HP',
+       '23.jpg','24.jpg',
+       100,1200000,1000000,'HIT','12번 노트북', 60);
+
+insert into shopping_product(pnum, pname, pcategory_fk, pcompany, 
+                        pimage1, pimage2, pqty, price, saleprice,
+                        pspec, pcontent, point)
+values(seq_shopping_product_pnum.nextval, '노트북13', '100000', '레노버',
+       '25.jpg','26.jpg',
+       100,1200000,1000000,'HIT','13번 노트북', 60);
+
+insert into shopping_product(pnum, pname, pcategory_fk, pcompany, 
+                        pimage1, pimage2, pqty, price, saleprice,
+                        pspec, pcontent, point)
+values(seq_shopping_product_pnum.nextval, '노트북14', '100000', '레노버',
+       '27.jpg','28.jpg',
+       100,1200000,1000000,'HIT','14번 노트북', 60);
+
+insert into shopping_product(pnum, pname, pcategory_fk, pcompany, 
+                        pimage1, pimage2, pqty, price, saleprice,
+                        pspec, pcontent, point)
+values(seq_shopping_product_pnum.nextval, '노트북15', '100000', '한성컴퓨터',
+       '29.jpg','30.jpg',
+       100,1200000,1000000,'HIT','15번 노트북', 60);
+
+insert into shopping_product(pnum, pname, pcategory_fk, pcompany, 
+                        pimage1, pimage2, pqty, price, saleprice,
+                        pspec, pcontent, point)
+values(seq_shopping_product_pnum.nextval, '노트북16', '100000', '한성컴퓨터',
+       '31.jpg','32.jpg',
+       100,1200000,1000000,'HIT','16번 노트북', 60);
+
+insert into shopping_product(pnum, pname, pcategory_fk, pcompany, 
+                        pimage1, pimage2, pqty, price, saleprice,
+                        pspec, pcontent, point)
+values(seq_shopping_product_pnum.nextval, '노트북17', '100000', '레노버',
+       '33.jpg','34.jpg',
+       100,1200000,1000000,'HIT','17번 노트북', 60);
+
+insert into shopping_product(pnum, pname, pcategory_fk, pcompany, 
+                        pimage1, pimage2, pqty, price, saleprice,
+                        pspec, pcontent, point)
+values(seq_shopping_product_pnum.nextval, '노트북18', '100000', '레노버',
+       '35.jpg','36.jpg',
+       100,1200000,1000000,'HIT','18번 노트북', 60);
+
+insert into shopping_product(pnum, pname, pcategory_fk, pcompany, 
+                        pimage1, pimage2, pqty, price, saleprice,
+                        pspec, pcontent, point)
+values(seq_shopping_product_pnum.nextval, '노트북19', '100000', 'LG전자',
+       '37.jpg','38.jpg',
+       100,1200000,1000000,'HIT','19번 노트북', 60);
+
+insert into shopping_product(pnum, pname, pcategory_fk, pcompany, 
+                        pimage1, pimage2, pqty, price, saleprice,
+                        pspec, pcontent, point)
+values(seq_shopping_product_pnum.nextval, '노트북20', '100000', 'LG전자',
+       '39.jpg','40.jpg',
+       100,1200000,1000000,'HIT','20번 노트북', 60);
+
+insert into shopping_product(pnum, pname, pcategory_fk, pcompany, 
+                        pimage1, pimage2, pqty, price, saleprice,
+                        pspec, pcontent, point)
+values(seq_shopping_product_pnum.nextval, '노트북21', '100000', '한성컴퓨터',
+       '41.jpg','42.jpg',
+       100,1200000,1000000,'HIT','21번 노트북', 60);
+
+insert into shopping_product(pnum, pname, pcategory_fk, pcompany, 
+                        pimage1, pimage2, pqty, price, saleprice,
+                        pspec, pcontent, point)
+values(seq_shopping_product_pnum.nextval, '노트북22', '100000', '에이서',
+       '43.jpg','44.jpg',
+       100,1200000,1000000,'HIT','22번 노트북', 60);
+
+insert into shopping_product(pnum, pname, pcategory_fk, pcompany, 
+                        pimage1, pimage2, pqty, price, saleprice,
+                        pspec, pcontent, point)
+values(seq_shopping_product_pnum.nextval, '노트북23', '100000', 'DELL',
+       '45.jpg','46.jpg',
+       100,1200000,1000000,'HIT','23번 노트북', 60);
+
+insert into shopping_product(pnum, pname, pcategory_fk, pcompany, 
+                        pimage1, pimage2, pqty, price, saleprice,
+                        pspec, pcontent, point)
+values(seq_shopping_product_pnum.nextval, '노트북24', '100000', '한성컴퓨터',
+       '47.jpg','48.jpg',
+       100,1200000,1000000,'HIT','24번 노트북', 60);
+
+insert into shopping_product(pnum, pname, pcategory_fk, pcompany, 
+                        pimage1, pimage2, pqty, price, saleprice,
+                        pspec, pcontent, point)
+values(seq_shopping_product_pnum.nextval, '노트북25', '100000', '삼성전자',
+       '49.jpg','50.jpg',
+       100,1200000,1000000,'HIT','25번 노트북', 60);
+
+insert into shopping_product(pnum, pname, pcategory_fk, pcompany, 
+                        pimage1, pimage2, pqty, price, saleprice,
+                        pspec, pcontent, point)
+values(seq_shopping_product_pnum.nextval, '노트북26', '100000', 'MSI',
+       '51.jpg','52.jpg',
+       100,1200000,1000000,'HIT','26번 노트북', 60);
+
+insert into shopping_product(pnum, pname, pcategory_fk, pcompany, 
+                        pimage1, pimage2, pqty, price, saleprice,
+                        pspec, pcontent, point)
+values(seq_shopping_product_pnum.nextval, '노트북27', '100000', '애플',
+       '53.jpg','54.jpg',
+       100,1200000,1000000,'HIT','27번 노트북', 60);
+
+insert into shopping_product(pnum, pname, pcategory_fk, pcompany, 
+                        pimage1, pimage2, pqty, price, saleprice,
+                        pspec, pcontent, point)
+values(seq_shopping_product_pnum.nextval, '노트북28', '100000', '아수스',
+       '55.jpg','56.jpg',
+       100,1200000,1000000,'HIT','28번 노트북', 60);
+
+insert into shopping_product(pnum, pname, pcategory_fk, pcompany, 
+                        pimage1, pimage2, pqty, price, saleprice,
+                        pspec, pcontent, point)
+values(seq_shopping_product_pnum.nextval, '노트북29', '100000', '레노버',
+       '57.jpg','58.jpg',
+       100,1200000,1000000,'HIT','29번 노트북', 60);
+
+insert into shopping_product(pnum, pname, pcategory_fk, pcompany, 
+                        pimage1, pimage2, pqty, price, saleprice,
+                        pspec, pcontent, point)
+values(seq_shopping_product_pnum.nextval, '노트북30', '100000', '삼성전자',
+       '59.jpg','60.jpg',
+       100,1200000,1000000,'HIT','30번 노트북', 60);
+
+insert into shopping_product(pnum, pname, pcategory_fk, pcompany, 
+                        pimage1, pimage2, pqty, price, saleprice,
+                        pspec, pcontent, point)
+values(seq_shopping_product_pnum.nextval, '노트북31', '100000', 'MSI',
+       '61.jpg','62.jpg',
+       100,1200000,1000000,'NEW','31번 노트북', 60);
+
+insert into shopping_product(pnum, pname, pcategory_fk, pcompany, 
+                        pimage1, pimage2, pqty, price, saleprice,
+                        pspec, pcontent, point)
+values(seq_shopping_product_pnum.nextval, '노트북32', '100000', '삼성전자',
+       '63.jpg','64.jpg',
+       100,1200000,1000000,'NEW','32번 노트북', 60);
+
+insert into shopping_product(pnum, pname, pcategory_fk, pcompany, 
+                        pimage1, pimage2, pqty, price, saleprice,
+                        pspec, pcontent, point)
+values(seq_shopping_product_pnum.nextval, '노트북33', '100000', '한성컴퓨터',
+       '65.jpg','66.jpg',
+       100,1200000,1000000,'NEW','33번 노트북', 60);
+
+insert into shopping_product(pnum, pname, pcategory_fk, pcompany, 
+                        pimage1, pimage2, pqty, price, saleprice,
+                        pspec, pcontent, point)
+values(seq_shopping_product_pnum.nextval, '노트북34', '100000', 'HP',
+       '67.jpg','68.jpg',
+       100,1200000,1000000,'NEW','34번 노트북', 60);
+
+insert into shopping_product(pnum, pname, pcategory_fk, pcompany, 
+                        pimage1, pimage2, pqty, price, saleprice,
+                        pspec, pcontent, point)
+values(seq_shopping_product_pnum.nextval, '노트북35', '100000', 'LG전자',
+       '69.jpg','70.jpg',
+       100,1200000,1000000,'NEW','35번 노트북', 60);
+
+insert into shopping_product(pnum, pname, pcategory_fk, pcompany, 
+                        pimage1, pimage2, pqty, price, saleprice,
+                        pspec, pcontent, point)
+values(seq_shopping_product_pnum.nextval, '노트북36', '100000', '한성컴퓨터',
+       '71.jpg','72.jpg',
+       100,1200000,1000000,'NEW','36번 노트북', 60);
+
+insert into shopping_product(pnum, pname, pcategory_fk, pcompany, 
+                        pimage1, pimage2, pqty, price, saleprice,
+                        pspec, pcontent, point)
+values(seq_shopping_product_pnum.nextval, '노트북37', '100000', '삼성전자',
+       '73.jpg','74.jpg',
+       100,1200000,1000000,'NEW','37번 노트북', 60);
+
+insert into shopping_product(pnum, pname, pcategory_fk, pcompany, 
+                        pimage1, pimage2, pqty, price, saleprice,
+                        pspec, pcontent, point)
+values(seq_shopping_product_pnum.nextval, '노트북38', '100000', '레노버',
+       '75.jpg','76.jpg',
+       100,1200000,1000000,'NEW','38번 노트북', 60);
+
+insert into shopping_product(pnum, pname, pcategory_fk, pcompany, 
+                        pimage1, pimage2, pqty, price, saleprice,
+                        pspec, pcontent, point)
+values(seq_shopping_product_pnum.nextval, '노트북39', '100000', 'MSI',
+       '77.jpg','78.jpg',
+       100,1200000,1000000,'NEW','39번 노트북', 60);
+
+insert into shopping_product(pnum, pname, pcategory_fk, pcompany, 
+                        pimage1, pimage2, pqty, price, saleprice,
+                        pspec, pcontent, point)
+values(seq_shopping_product_pnum.nextval, '노트북40', '100000', '레노버',
+       '79.jpg','80.jpg',
+       100,1200000,1000000,'NEW','40번 노트북', 60);
+
+insert into shopping_product(pnum, pname, pcategory_fk, pcompany, 
+                        pimage1, pimage2, pqty, price, saleprice,
+                        pspec, pcontent, point)
+values(seq_shopping_product_pnum.nextval, '노트북41', '100000', '레노버',
+       '81.jpg','82.jpg',
+       100,1200000,1000000,'NEW','41번 노트북', 60);
+
+insert into shopping_product(pnum, pname, pcategory_fk, pcompany, 
+                        pimage1, pimage2, pqty, price, saleprice,
+                        pspec, pcontent, point)
+values(seq_shopping_product_pnum.nextval, '노트북42', '100000', '레노버',
+       '83.jpg','84.jpg',
+       100,1200000,1000000,'NEW','42번 노트북', 60);
+
+insert into shopping_product(pnum, pname, pcategory_fk, pcompany, 
+                        pimage1, pimage2, pqty, price, saleprice,
+                        pspec, pcontent, point)
+values(seq_shopping_product_pnum.nextval, '노트북43', '100000', 'MSI',
+       '85.jpg','86.jpg',
+       100,1200000,1000000,'NEW','43번 노트북', 60);
+
+insert into shopping_product(pnum, pname, pcategory_fk, pcompany, 
+                        pimage1, pimage2, pqty, price, saleprice,
+                        pspec, pcontent, point)
+values(seq_shopping_product_pnum.nextval, '노트북44', '100000', '한성컴퓨터',
+       '87.jpg','88.jpg',
+       100,1200000,1000000,'NEW','44번 노트북', 60);
+
+insert into shopping_product(pnum, pname, pcategory_fk, pcompany, 
+                        pimage1, pimage2, pqty, price, saleprice,
+                        pspec, pcontent, point)
+values(seq_shopping_product_pnum.nextval, '노트북45', '100000', '애플',
+       '89.jpg','90.jpg',
+       100,1200000,1000000,'NEW','45번 노트북', 60);
+
+insert into shopping_product(pnum, pname, pcategory_fk, pcompany, 
+                        pimage1, pimage2, pqty, price, saleprice,
+                        pspec, pcontent, point)
+values(seq_shopping_product_pnum.nextval, '노트북46', '100000', '아수스',
+       '91.jpg','92.jpg',
+       100,1200000,1000000,'NEW','46번 노트북', 60);
+
+insert into shopping_product(pnum, pname, pcategory_fk, pcompany, 
+                        pimage1, pimage2, pqty, price, saleprice,
+                        pspec, pcontent, point)
+values(seq_shopping_product_pnum.nextval, '노트북47', '100000', '삼성전자',
+       '93.jpg','94.jpg',
+       100,1200000,1000000,'NEW','47번 노트북', 60);
+
+insert into shopping_product(pnum, pname, pcategory_fk, pcompany, 
+                        pimage1, pimage2, pqty, price, saleprice,
+                        pspec, pcontent, point)
+values(seq_shopping_product_pnum.nextval, '노트북48', '100000', 'LG전자',
+       '95.jpg','96.jpg',
+       100,1200000,1000000,'NEW','48번 노트북', 60);
+
+insert into shopping_product(pnum, pname, pcategory_fk, pcompany, 
+                        pimage1, pimage2, pqty, price, saleprice,
+                        pspec, pcontent, point)
+values(seq_shopping_product_pnum.nextval, '노트북49', '100000', '한성컴퓨터',
+       '97.jpg','98.jpg',
+       100,1200000,1000000,'NEW','49번 노트북', 60);
+
+insert into shopping_product(pnum, pname, pcategory_fk, pcompany, 
+                        pimage1, pimage2, pqty, price, saleprice,
+                        pspec, pcontent, point)
+values(seq_shopping_product_pnum.nextval, '노트북50', '100000', '레노버',
+       '99.jpg','100.jpg',
+       100,1200000,1000000,'NEW','50번 노트북', 60);
+
+
+commit;
+
+select pnum, pname, pcategory_fk, pcompany, pimage1, pimage2, pqty, price, saleprice, pspec, pcontent, point, pinputdate
+from
+(
+select row_number () over(order by pnum asc) as RNO
+     , pnum, pname, pcategory_fk, pcompany, pimage1, pimage2, pqty, price, saleprice, pspec, pcontent, point
+     , to_char(pinputdate, 'yyyy-mm-dd') as pinputdate
+from shopping_product 
+where pspec = 'HIT'
+)V
+where RNO between 1 and 8;
+
+------------------------------------------------------------------------
+       
 commit;     
 
 select pnum, pname, pcategory_fk, pcompany, pimage1, pimage2, pqty, price, saleprice, pspec, pcontent, point
@@ -1070,3 +1438,38 @@ commit;
 select storeID, storeName, storeUrl, storeImg, storeAddress, lat, lng, zindex
 from shopping_map
 order by zindex asc;
+
+
+
+
+
+
+
+
+--------------------시험--------------------
+create table ncstest_comments
+(no                  number 
+,commentContents     varchar2(4000) not null
+,writeDate           date default sysdate
+,constraint PK_ncstest_comments primary key(no)
+);
+
+create sequence seq_ncstest_comments
+start with 1
+increment by 1
+nomaxvalue
+nominvalue
+nocycle
+nocache;
+
+select *
+from ncstest_comments;
+
+insert into ncstest_comments(no, commentContents, writeDate)
+values(1, '테스트', default)
+
+insert into ncstest_comments(no, commentContents, writeDate)
+values(seq_ncstest_comments.nextval, ?, default)
+
+
+    
