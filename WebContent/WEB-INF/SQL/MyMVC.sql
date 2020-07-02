@@ -1,3 +1,398 @@
+-- 카테고리
+
+CREATE TABLE product_category(
+   category_id         VARCHAR2(10) NOT NULL
+  ,category_name       VARCHAR(25) NOT NULL
+  ,category_seq        NUMBER  NOT NULL
+  ,constraint PK_product_category primary key(category_id)
+);
+
+create sequence category_seq
+start with 1
+increment by 1
+nomaxvalue
+nominvalue
+nocycle
+nocache;
+
+
+INSERT INTO product_category(category_id,category_name,category_seq) VALUES ('d_cb','콜드 브루 커피',category_seq.nextval);
+INSERT INTO product_category(category_id,category_name,category_seq) VALUES ('d_br','브루드 커피',category_seq.nextval);
+INSERT INTO product_category(category_id,category_name,category_seq) VALUES ('d_es','에스프레소',category_seq.nextval);
+INSERT INTO product_category(category_id,category_name,category_seq) VALUES ('d_fp','프라푸치노' ,category_seq.nextval);
+INSERT INTO product_category(category_id,category_name,category_seq) VALUES ('d_bl','블렌디드' ,category_seq.nextval);
+INSERT INTO product_category(category_id,category_name,category_seq) VALUES ('d_te','티',category_seq.nextval);
+INSERT INTO product_category(category_id,category_name,category_seq) VALUES ('d_nc','기타 제조 음료' ,category_seq.nextval);
+
+INSERT INTO product_category(category_id,category_name,category_seq) VALUES ('f_bk','베이커리' ,category_seq.nextval);
+INSERT INTO product_category(category_id,category_name,category_seq) VALUES ('f_ca','케이크' ,category_seq.nextval);
+INSERT INTO product_category(category_id,category_name,category_seq) VALUES ('f_ss','샌드위치 샐러드' ,category_seq.nextval);
+INSERT INTO product_category(category_id,category_name,category_seq) VALUES ('f_wf','따뜻한 푸드' ,category_seq.nextval);
+INSERT INTO product_category(category_id,category_name,category_seq) VALUES ('f_fy','과일 요거트' ,category_seq.nextval);
+
+select * from product_category;
+
+commit;
+
+
+
+-- 드링크
+
+ CREATE TABLE drink(
+   id            VARCHAR2(10) NOT NULL
+  ,category_id   VARCHAR2(10) NOT NULL
+  ,drink_seq     NUMBER(10) NOT NULL
+  ,name          VARCHAR(50) NOT NULL
+  ,name_eng      VARCHAR2(50) NOT NULL
+  ,description   VARCHAR2(200) NOT NULL
+  ,price         NUMBER(4) NOT NULL
+  ,img           VARCHAR2(20) NOT NULL
+  ,shot         NUMBER(1) NOT NULL
+  ,syrup         VARCHAR2(30) NOT NULL
+  ,whipped_cream VARCHAR2(10) NOT NULL
+  ,temperature   VARCHAR2(10) NOT NULL
+  ,caffein       NUMBER(3)  NOT NULL
+  ,base          VARCHAR2(30) NOT NULL
+  ,constraint  PK_drink_id primary key(id)
+  ,constraint  FK_drink_id foreign key(id) references nutrition(product_id)
+  ,constraint  FK_drink_category_code foreign key(category_id) references product_category(category_id)
+);
+
+drop table drink purge;
+
+create sequence drink_seq
+start with 1
+increment by 1
+nomaxvalue
+nominvalue
+nocycle
+nocache;
+
+select * from product_category;
+
+select *
+from drink;
+
+-- cold brew
+INSERT INTO drink
+(id, category_id, drink_seq,name,name_eng,description,price,img,shot,syrup,whipped_cream,temperature,caffein,base) 
+VALUES ('d001','d_cb',drink_seq.nextval,'나이트로 바닐라크림','Nitro Vanilla Cream','부드러운 목넘김의 나이트로 커피와 바닐라 크림의 매력을 한번에 느껴보세요!',5900,'d001.jpg',0,'없음','none','non-iced',245, '물');
+
+INSERT INTO drink
+(id, category_id, drink_seq,name,name_eng,description,price,img,shot,syrup,whipped_cream,temperature,caffein,base) 
+VALUES ('d002','d_cb', drink_seq.nextval,'나이트로 쇼콜라 클라우드','Nitro Chocolat Cloud','초콜릿과 견과류의 풍미, 초콜릿 파우더 토핑의 부드럽고 달콤한 나이트로 콜드 브루',6100,'d002.jpg',0,'초콜릿시럽','none','non-iced',245, '없음');
+
+INSERT INTO drink
+(id, category_id, drink_seq,name,name_eng,description,price,img,shot,syrup,whipped_cream,temperature,caffein,base) 
+VALUES ('d003','d_cb',drink_seq.nextval,'나이트로 콜드 브루','Nitro Cold Brew','나이트로 커피 정통의 캐스케이딩과 부드러운 콜드 크레마!',5800,'d003.jpg',0,'없음','none','non-iced',245,'없음');
+
+INSERT INTO drink
+(id, category_id, drink_seq,name,name_eng,description,price,img,shot,syrup,whipped_cream,temperature,caffein,base) 
+VALUES ('d004','d_cb',drink_seq.nextval,'돌체 콜드 브루','Dolce Cold Brew','동남아 휴가지에서 즐기는 커피를 떠오르게 하는 돌체 콜드 브루',5800,'d004.jpg',0,'돌체시럽','none','iced',150,'우유');
+
+INSERT INTO drink
+(id, category_id, drink_seq,name,name_eng,description,price,img,shot,syrup,whipped_cream,temperature,caffein,base) 
+VALUES ('d005','d_cb',drink_seq.nextval,'바닐라 크림 콜드 브루','Vanilla Cream Cold Brew','콜드 브루에 더해진 바닐라 크림으로 깔끔하면서 달콤한 콜드 브루를 새롭게 즐길 수 있는 음료입니다.',5500,'d005.jpg',0,'바닐라시럽','none','iced',150,'바닐라크림베이스');
+
+INSERT INTO drink
+(id, category_id, drink_seq,name,name_eng,description,price,img,shot,syrup,whipped_cream,temperature,caffein,base) 
+VALUES ('d006','d_cb',drink_seq.nextval,'콜드 브루','Cold Brew','스타벅스 바리스타의 정성으로 탄생한 콜드 브루!',4500,'d006.jpg',0,'없음','none','iced',150, '물');
+
+ 
+ -- brewed coffee
+ INSERT INTO drink
+(id, category_id, drink_seq,name,name_eng,description,price,img,shot,syrup,whipped_cream,temperature,caffein,base) 
+VALUES ('d007','d_br',drink_seq.nextval,'아이스 커피','Iced Coffee','깔끔하고 상큼함이 특징인 시원한 아이스 커피',4100,'d007.jpg',0,'없음','none','iced',140, '물');
+ 
+ INSERT INTO drink
+(id, category_id, drink_seq,name,name_eng,description,price,img,shot,syrup,whipped_cream,temperature,caffein,base) 
+VALUES ('d008','d_br',drink_seq.nextval,'오늘의 커피','Brewed Coffee','신선하게 브루드(Brewed)되어 원두의 다양함이 살아있는 커피',3800,'d008.jpg',0,'없음','none','non-iced',260, '물');
+
+-- espresso
+
+ INSERT INTO drink
+(id, category_id, drink_seq,name,name_eng,description,price,img,shot,syrup,whipped_cream,temperature,caffein,base) 
+VALUES ('d009','d_es',drink_seq.nextval,'아이스 카페 아메리카노','Iced Caffe Americano','강렬한 에스프레소 샷에 시원한 물의 조화',4100,'d009.jpg',2,'없음','none','iced',150,'물');
+
+ INSERT INTO drink
+(id, category_id, drink_seq,name,name_eng,description,price,img,shot,syrup,whipped_cream,temperature,caffein,base) 
+VALUES ('d010','d_es',drink_seq.nextval,'카페 아메리카노','Caffe Americano','강렬한 에스프레소 샷에 뜨거운 물의 조화',4100,'d010.jpg',2,'없음','none','non-iced',150,'물');
+
+ INSERT INTO drink
+(id, category_id, drink_seq,name,name_eng,description,price,img,shot,syrup,whipped_cream,temperature,caffein,base) 
+VALUES ('d011','d_es',drink_seq.nextval,'아이스 카라멜 마키아또','Iced Caramel Macchiato','바닐라 시럽, 시원한 우유에 얼음과 에스프레소 샷, 카라멜 드리즐이 어우러진 음료',5600,'d011.jpg',1,'카라멜시럽','none','iced',75,'우유');
+
+ INSERT INTO drink
+(id, category_id, drink_seq,name,name_eng,description,price,img,shot,syrup,whipped_cream,temperature,caffein,base) 
+VALUES ('d012','d_es',drink_seq.nextval,'카라멜 마키아또','Caramel Macchiato','바닐라 시럽과 우유, 그리고 그 위에 얹어진 에스프레소 샷과 달콤한 카라멜 드리즐의 조화',5600,'d012.jpg',1,'카라멜시럽','none','non-iced',75,'우유');
+
+ INSERT INTO drink
+(id, category_id, drink_seq,name,name_eng,description,price,img,shot,syrup,whipped_cream,temperature,caffein,base) 
+VALUES ('d013','d_es',drink_seq.nextval,'아이스 카푸치노','Iced Cappuccino','에스프레소 샷과 시원한 우유에 부드러운 우유 거품이 얹어진 시원한 음료.',4600,'d013.jpg',1,'없음','none','iced',75,'우유');
+ 
+ INSERT INTO drink
+(id, category_id, drink_seq,name,name_eng,description,price,img,shot,syrup,whipped_cream,temperature,caffein,base) 
+VALUES ('d014','d_es',drink_seq.nextval,'카푸치노','Cappuccino','에스프레소 샷과 시원한 우유에 부드러운 우유 거품이 얹어진 음료.',4600,'d014.jpg',1,'없음','none','non-iced',75,'우유');
+ 
+ INSERT INTO drink
+(id, category_id, drink_seq,name,name_eng,description,price,img,shot,syrup,whipped_cream,temperature,caffein,base) 
+VALUES ('d015','d_es',drink_seq.nextval,'아이스 카페 라떼','Iced Caffe Latte','에스프레소 샷과 시원한 우유와 얼음으로 고소한 음료.',4600,'d015.jpg',1,'없음','none','iced',75,'우유');
+ 
+ INSERT INTO drink
+(id, category_id, drink_seq,name,name_eng,description,price,img,shot,syrup,whipped_cream,temperature,caffein,base) 
+VALUES ('d016','d_es',drink_seq.nextval,'카페 라떼','Caffe Latte','에스프레소 샷과 따뜻한 우유로 고소한 음료',4600,'d016.jpg',1,'없음','none','non-iced',75,'우유');
+
+ INSERT INTO drink
+(id, category_id, drink_seq,name,name_eng,description,price,img,shot,syrup,whipped_cream,temperature,caffein,base) 
+VALUES ('d017','d_es',drink_seq.nextval,'아이스 카페 모카','Iced Caffe Mocha','모카시럽과 시원한 우유에 휘핑크림이 토핑된 에스프레소 음료.',4600,'d017.jpg',1,'모카시럽','regular','iced',95,'우유');
+ 
+ INSERT INTO drink
+(id, category_id, drink_seq,name,name_eng,description,price,img,shot,syrup,whipped_cream,temperature,caffein,base) 
+VALUES ('d018','d_es',drink_seq.nextval,'카페 모카','Caffe Mocha','모카시럽과 따뜻한 우유에 휘핑크림이 토핑된 에스프레소 음료.',4600,'d018.jpg',1,'모카시럽','regular','non-iced',95,'우유');
+
+ INSERT INTO drink
+(id, category_id, drink_seq,name,name_eng,description,price,img,shot,syrup,whipped_cream,temperature,caffein,base) 
+VALUES ('d019','d_es',drink_seq.nextval,'아이스 화이트 초콜릿 모카','Iced White Chocolate Mocha','화이트 초콜릿과 시원한 우유가 첨가된 에스프레소 음료.',4600,'d019.jpg',1,'화이트모카시럽','regular','iced',75,'우유');
+ 
+ INSERT INTO drink
+(id, category_id, drink_seq,name,name_eng,description,price,img,shot,syrup,whipped_cream,temperature,caffein,base) 
+VALUES ('d020','d_es',drink_seq.nextval,'화이트 초콜릿 모카','White Chocolate Mocha','화이트 초콜릿과 스팀밀크가 첨가된 에스프레소 음료.',4600,'d020.jpg',1,'화이트모카시럽','regular','non-iced',75,'우유');      
+  
+ INSERT INTO drink
+(id, category_id, drink_seq,name,name_eng,description,price,img,shot,syrup,whipped_cream,temperature,caffein,base) 
+VALUES ('d021','d_es',drink_seq.nextval,'에스프레소','Espresso','스타벅스의 핵심인 강렬하고 카라멜향이 달콤한 음료',3600,'d021.jpg',1,'없음','none','non-iced',75,'없음');
+ 
+ 
+ -- 프라푸치노
+ 
+ INSERT INTO drink
+(id, category_id, drink_seq,name,name_eng,description,price,img,shot,syrup,whipped_cream,temperature,caffein,base) 
+VALUES ('d022','d_fp',drink_seq.nextval,'더블 에스프레소 칩 프라푸치노','Double Espresso Chip Frappuccino','에스프레소 2샷과 에스프레소 칩이 어우러진 커피의 기본에 충실한 더블 에스프레소 칩 프라푸치노',6100,'d022.jpg',2,'프라푸치노시럽','regular','iced',130,'우유');      
+  
+ INSERT INTO drink
+(id, category_id, drink_seq,name,name_eng,description,price,img,shot,syrup,whipped_cream,temperature,caffein,base) 
+VALUES ('d023','d_fp',drink_seq.nextval,'모카 프라푸치노','Mocha Frappuccino','초콜릿, 커피와 얼음이 갈린 음료에 휘핑크림이 토핑된 음료.',5600,'d023.jpg',2,'프라푸치노시럽','regular','iced',90,'우유');      
+
+ INSERT INTO drink
+(id, category_id, drink_seq,name,name_eng,description,price,img,shot,syrup,whipped_cream,temperature,caffein,base) 
+VALUES ('d024','d_fp',drink_seq.nextval,'에스프레소 프라푸치노','Espresso Frappuccino','에스프레소의 강렬함과 약간의 단맛을 시원하게 즐기는 프라푸치노.',5100,'d024.jpg',2,'프라푸치노시럽','regular','iced',120,'우유');      
+
+ INSERT INTO drink
+(id, category_id, drink_seq,name,name_eng,description,price,img,shot,syrup,whipped_cream,temperature,caffein,base) 
+VALUES ('d025','d_fp',drink_seq.nextval,'자바 칩 프라푸치노','Java Chip Frappuccino','커피 프라푸치노에 초콜릿, 초콜릿 칩이 첨가된 아이스 블렌드로 달콤 아삭한 음료.',6100,'d025.jpg',2,'프라푸치노시럽','regular','iced',100,'우유');      
+
+ INSERT INTO drink
+(id, category_id, drink_seq,name,name_eng,description,price,img,shot,syrup,whipped_cream,temperature,caffein,base) 
+VALUES ('d026','d_fp',drink_seq.nextval,'카라멜 프라푸치노','Caramel Frappuccino','카라멜 시럽이 더해진 커피 프라푸치노에 휘핑 크림, 카라멜이 장식된 음료.',5600,'d026.jpg',2,'프라푸치노시럽','regular','iced',85,'우유');      
+
+
+ INSERT INTO drink
+(id, category_id, drink_seq,name,name_eng,description,price,img,shot,syrup,whipped_cream,temperature,caffein,base) 
+VALUES ('d027','d_fp',drink_seq.nextval,'바닐라 크림 프라푸치노','Vanilla Cream Frappuccino','우유에 바닐라향이 조합된 아이스 블렌드로 휘핑크림이 토핑된 음료.',4800,'d027.jpg',0,'프라푸치노시럽','regular','iced',0,'우유');      
+
+ INSERT INTO drink
+(id, category_id, drink_seq,name,name_eng,description,price,img,shot,syrup,whipped_cream,temperature,caffein,base) 
+VALUES ('d028','d_fp',drink_seq.nextval,'초콜릿 크림 칩 프라푸치노','Chocolate Cream Chip Frappuccino','모카시럽과 자바칩이 혼합된 크림 프라푸치노로 휘핑크림, 초콜렛 드리즐된 음료.',5700,'d028.jpg',0,'프라푸치노시럽','regular','iced',0,'우유');      
+
+ INSERT INTO drink
+(id, category_id, drink_seq,name,name_eng,description,price,img,shot,syrup,whipped_cream,temperature,caffein,base) 
+VALUES ('d029','d_fp',drink_seq.nextval,'피스타치오 크림 프라푸치노','Pistachio Cream Frappuccino','젤라또를 먹는 듯한 크리미함과 고소함이 극에 달한 피스타치오 크림 프라푸치노를 만나보세요.',6300,'d029.jpg',0,'프라푸치노시럽','regular','iced',0,'우유');      
+  
+  
+  commit;
+  
+  -- 블렌디드
+  
+   INSERT INTO drink
+(id, category_id, drink_seq,name,name_eng,description,price,img,shot,syrup,whipped_cream,temperature,caffein,base) 
+VALUES ('d030','d_bl',drink_seq.nextval,'애플망고 요거트 블렌디드','Apple Mango Yogurt Blended','말랑한 애플망고 과육과 부드러운 요거트가 산뜻하게 어우러진 애플망고 요거트 블렌디드',6300,'d030.jpg',0,'블렌디드시럽','none','iced',0,'우유');      
+
+ INSERT INTO drink
+(id, category_id, drink_seq,name,name_eng,description,price,img,shot,syrup,whipped_cream,temperature,caffein,base) 
+VALUES ('d031','d_bl',drink_seq.nextval,'피치레몬 블렌디드','Peach Lemon Blended','달콤한 복숭아와 새콤한 레몬, 말랑한 복숭아 젤리가 만난 피치 레몬 블렌디드',6100,'d031.jpg',0,'클래식시럽','none','iced',0,'레모네이드');      
+
+ INSERT INTO drink
+(id, category_id, drink_seq,name,name_eng,description,price,img,shot,syrup,whipped_cream,temperature,caffein,base) 
+VALUES ('d032','d_bl',drink_seq.nextval,'망고 패션 후르츠 블렌디드','Mango Passion Fruit Blended','진한 블랙 티에 망고 패션 후르츠 주스가 조합된 아이스 블렌드 음료',5000,'d032.jpg',0,'블렌디드시럽','none','iced',35,'블랙티');      
+  
+ INSERT INTO drink
+(id, category_id, drink_seq,name,name_eng,description,price,img,shot,syrup,whipped_cream,temperature,caffein,base) 
+VALUES ('d033','d_bl',drink_seq.nextval,'딸기 요거트 블렌디드','Strawberry Yogurt Blended','딸기와 요거트의 상큼함이 가득 느껴지는 가벼운 컨셉의 블렌디드 음료',6100,'d033.jpg',0,'블렌디드시럽','none','iced',0,'우유');      
+
+-- 티 
+
+ INSERT INTO drink
+(id, category_id, drink_seq,name,name_eng,description,price,img,shot,syrup,whipped_cream,temperature,caffein,base) 
+VALUES ('d034','d_te',drink_seq.nextval,'스타벅스 라임 모히토 티','Starbucks Lime Mojito Tea','라임과 사과 과즙이 팡팡 터지는 맑고 청량한 스타벅스 라임 모히토 티',6100,'d034.jpg',0,'없음','none','iced',11,'그린애플베이스');      
+  
+ INSERT INTO drink
+(id, category_id, drink_seq,name,name_eng,description,price,img,shot,syrup,whipped_cream,temperature,caffein,base) 
+VALUES ('d035','d_te',drink_seq.nextval,'아이스 얼그레이티','Iced Earl Grey Tea','시원하게 즐기는 뜨거운 물에 우려내 라벤더 향의 블랙 티',4100,'d035.jpg',0,'없음','none','iced',50,'물');      
+
+ INSERT INTO drink
+(id, category_id, drink_seq,name,name_eng,description,price,img,shot,syrup,whipped_cream,temperature,caffein,base) 
+VALUES ('d036','d_te',drink_seq.nextval,'얼 그레이 티','Earl Grey Brewed Tea','뜨거운 물에 우려내 라벤더 향이 특징적인 향긋한 블랙 티',4100,'d036.jpg',0,'없음','none','non-iced',50,'물');      
+  
+ INSERT INTO drink
+(id, category_id, drink_seq,name,name_eng,description,price,img,shot,syrup,whipped_cream,temperature,caffein,base) 
+VALUES ('d037','d_te',drink_seq.nextval,'아이스 차이 티','Iced Chai Brewed Tea','진저, 카르다몸, 이국적인 풍미의 시나몬 등이 블렌딩된 블랙 티.',4100,'d037.jpg',0,'없음','none','iced',45,'물');      
+
+ INSERT INTO drink
+(id, category_id, drink_seq,name,name_eng,description,price,img,shot,syrup,whipped_cream,temperature,caffein,base) 
+VALUES ('d038','d_te',drink_seq.nextval,'차이 티','Chai Brewed Tea','진저, 카르다몸, 이국적인 풍미의 시나몬 등이 블렌딩된 블랙 티.',4100,'d038.jpg',0,'없음','none','non-iced',45,'물');      
+
+ INSERT INTO drink
+(id, category_id, drink_seq,name,name_eng,description,price,img,shot,syrup,whipped_cream,temperature,caffein,base) 
+VALUES ('d039','d_te',drink_seq.nextval,'아이스 제주 유기 녹차','Iced Jeju Organic Green Tea','제주도 산 유기 녹차로만 이루어져 맑은 수색과 신선한 향, 맛이 뛰어난 녹차.',4100,'d039.jpg',0,'없음','none','iced',16,'물');      
+
+ INSERT INTO drink
+(id, category_id, drink_seq,name,name_eng,description,price,img,shot,syrup,whipped_cream,temperature,caffein,base) 
+VALUES ('d040','d_te',drink_seq.nextval,'제주 유기 녹차','Jeju Organic Green Tea','제주도 산 유기 녹차로만 이루어져 맑은 수색과 신선한 향, 맛이 뛰어난 녹차.',4100,'d040.jpg',0,'없음','none','non-iced',16,'물');      
+
+
+ INSERT INTO drink
+(id, category_id, drink_seq,name,name_eng,description,price,img,shot,syrup,whipped_cream,temperature,caffein,base) 
+VALUES ('d041','d_te',drink_seq.nextval,'아이스 제주 유기 말차 라떼','Iced Jeju Malcha Latte','깊고 진한 말차 본연의 맛과 향을 시원하고 부드럽게 즐길 수 있는 제주 유기농 말차 라떼',6100,'d041.jpg',0,'클래식시럽','none','iced',60,'우유');      
+a
+
+-- 기타 제조 음료
+
+ INSERT INTO drink
+(id, category_id, drink_seq,name,name_eng,description,price,img,shot,syrup,whipped_cream,temperature,caffein,base) 
+VALUES ('d045','d_nc',drink_seq.nextval,'시그니처 핫 초콜릿','Signature Hot Chocolate','유럽 스타일의 진한 핫 초콜릿으로 휘핑크림과 코코아 파우더가 토핑된 음료',5300,'d045.jpg',0,'없음','regular','non-iced',15,'우유');      
+
+ INSERT INTO drink
+(id, category_id, drink_seq,name,name_eng,description,price,img,shot,syrup,whipped_cream,temperature,caffein,base) 
+VALUES ('d046','d_nc',drink_seq.nextval,'아이스 시그니처 초콜릿','Iced Signature Chocolate','진한 초콜릿과 시원한 우유에 휘핑과 코코아 파우더가 얹어진 음료.',5300,'d046.jpg',0,'없음','regular','iced',15,'우유');      
+  
+  
+   INSERT INTO drink
+(id, category_id, drink_seq,name,name_eng,description,price,img,shot,syrup,whipped_cream,temperature,caffein,base) 
+VALUES ('d047','d_nc',drink_seq.nextval,'스팀 우유','Steamed Milk','부드럽고 담백한 따뜻한 우유.',4100,'d047.jpg',0,'없음','none','non-iced',0,'우유');      
+
+ INSERT INTO drink
+(id, category_id, drink_seq,name,name_eng,description,price,img,shot,syrup,whipped_cream,temperature,caffein,base) 
+VALUES ('d048','d_nc',drink_seq.nextval,'우유','Milk','고소하고 담백한 신선한 우유.',4100,'d048.jpg',0,'없음','none','iced',0,'우유');      
+
+
+--고객의소리 시퀀스
+create sequence feedback_board_seq
+start with 1
+increment by 1
+nomaxvalue
+nominvalue
+nocycle
+nocache;
+
+drop table feedback_post purge;
+
+----고객의 소리 게시판-----
+create table feedback_post
+(
+feedback_board_seq   number                    -- 고객의소리시퀀스
+,store_id            varchar2(20)    not null  -- 매장아이디
+,userid              varchar2(20)    not null  -- 아이디
+,category            varchar2(10)    not null  -- 주제 (문의,칭찬,제안,불만)
+,title               varchar2(100)   not null  -- 글제목  
+,contents            varchar2(2500)  not null  -- 내용
+,hp1                 varchar2(3)               -- 연락처
+,hp2                 varchar2(200)             --         
+,hp3                 varchar2(200)             --     
+,file_attached       varchar2(100)             -- 첨부파일
+,file_attached2       varchar2(100)             -- 첨부파일2
+,hit                 number  default 0         -- 조회수
+,username            varchar2(10)              -- 작성자
+,write_day           date default sysdate      -- 작성일
+,status              varchar2(10)              -- 상태(접수중,완료)
+,constraint PK_feedback_post primary key(feedback_board_seq)
+,constraint FK_feedback_post_store_id foreign key(store_id)
+                            references shopping_map(storeID)
+,constraint FK_feedback_post_userid foreign key(userid)
+                            references starbucks_Member(userid)        
+);
+
+
+select *
+from feedback_post;
+
+insert into feedback_post (feedback_board_seq, store_id, userid, category, title, contents, hit, username, write_day, status)
+values (seq_notice_post.nextval, 'store1', 'gpwjd1789', '문의', '종각점에 레디백 재고 있나요?', '답변빨리해주세요', default, '주혜정', sysdate, '접수중'); 
+
+insert into feedback_post (feedback_board_seq, store_id, userid, category, title, contents, hit, username, write_day, status)
+values (seq_notice_post.nextval, 'store2', 'gpwjd1789', '칭찬', '여기지점 맛있어요', '짱이에요', default, '주혜정', sysdate, '접수중'); 
+
+insert into feedback_post (feedback_board_seq, store_id, userid, category, title, contents, hit, username, write_day, status)
+values (seq_notice_post.nextval, 'store3', 'gpwjd1789', '불만', '여기지점 더러워요', '청결에 신경을 써주세요', default, '주혜정', sysdate, '접수중'); 
+
+insert into feedback_post (feedback_board_seq, store_id, userid, category, title, contents, hp1, hp2, hp3, file_attached, hit, username, write_day, status)
+values (seq_notice_post.nextval, 'store1', 'gpwjd1789', '문의', '종각점에 레디백 재고 있나요?', '답변빨리해주세요', '', '', '', '', default, '주혜정', sysdate, '접수중'); 
+
+commit;
+
+-- 나의 메뉴
+create table favorite_menu
+(userid          varchar2(20)    not null        -- 아이디
+,product_id      varchar2(30)                    -- 제품아이디
+,my_menu_seq     number                          -- 나의메뉴시퀀스
+,product_name    varchar2(50)                    -- 제품명
+,register_day    date default sysdate            -- 등록일
+,section         number
+,constraint FK_favorite_menu_userid foreign key (userid)
+                                      references starbucks_member(userid)
+,constraint FK_favorite_menu_proId foreign key (product_id)
+                                      references nutrition(product_id)
+);
+
+
+
+-- 구매 상세
+create table purchase_detail
+(product_id             varchar2(20)                -- 제품아이디
+,slip_num               varchar2(20)                -- 전표번호
+,userid                 varchar2(20)   not null     -- 아이디
+,store_id               varchar2(20)   not null     -- 매장아이디
+,cnt                    number                      -- 주문수량
+,price                  number                      -- 금액
+,product_code           varchar2(20)                -- 제품코드
+,purchase_detail_seq    number                      -- 구매상세시퀀스
+,constraint FK_purchase_detail_proId foreign key (product_id)
+                                      references nutrition(product_id)
+,constraint FK_purchase_detail_slipNum foreign key (slip_num)
+                                      references slip(slip_num)
+,constraint FK_purchase_detail_userid foreign key (userid)
+                                      references member(userid)
+,constraint FK_purchase_detail_storeId foreign key (store_id)
+                                      references store_location(store_id)
+);
+
+
+-- 전표
+create table slip
+(slip_num           varchar2(20)               -- 전표번호
+,userid             varchar2(20)  not null     -- 아이디
+,store_id           varchar2(20)  not null     -- 매장아이디
+,purchase_day       date default sysdate       -- 판매일자
+,slip_seq           number                     -- 전표시퀀스
+,constraint PK_slip primary key(slip_num)
+,constraint FK_slip foreign key (userid)
+                            references starbucks_member(userid)
+,constraint FK_slip_storeId foreign key (store_id)
+                            references store_location(store_id)
+);
+
+
+
+
+
+
+select *
+from starbucks_member;
+
+update starbucks_member set point = '5000'
+where userid = 'test';
+
+commit;
+
 show user;
 -- USER이(가) "MYORAUSER"입니다.
 
@@ -1473,3 +1868,44 @@ values(seq_ncstest_comments.nextval, ?, default)
 
 
     
+    
+  
+-- 음료+푸드 사진정보
+(select N.parent_table, id, category_id, name, name_eng, description, price, img
+from drink D, nutrition N
+where D.id = N.product_id)
+union all
+(select N.parent_table, id, category_id, name, name_eng, description, price, img
+from food F, nutrition N
+where F.id = N.product_id);
+
+
+
+commit;
+
+-- 음료+푸드 영양정보
+(select product_id,nutrition_Seq,kcal,sodium,cholesterol,sugar, protein,allergy_Triggers
+from drink D, nutrition N
+where D.id = N.product_id)
+union all
+(select product_id,nutrition_Seq,kcal,sodium,cholesterol,sugar, protein,allergy_Triggers
+from food F, nutrition N
+where F.id = N.product_id);  
+    
+ create sequence favorite_menu_seq
+ start with 1
+ increment by 1
+ nomaxvalue
+ nominvalue
+ nocycle
+ nocache;
+ 
+select userid, 
+       row_number() over(order by my_menu_seq asc) AS No, 
+       my_menu_seq, product_name, section 
+from favorite_menu;
+
+ 
+ 
+select *
+from starbucks_member;
